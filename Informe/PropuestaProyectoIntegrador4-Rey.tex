@@ -1,0 +1,54 @@
+\documentclass[11 pts]{article}
+\usepackage{url}
+
+\linespread{1.25}
+
+\usepackage[a4paper,
+            left=2cm,
+            right=2cm,
+            top=3cm,
+            bottom=3cm]{geometry}
+
+\title{\textbf{Título: Segmentación de Clientes con Algoritmos de Aprendizaje Automático no Supervisado}}
+\author{Tutor: Dra. Andrea Alejandra Rey}
+\date{}
+
+\hyphenation{des-cu-bri-mien-to}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+\section{Descripción del problema}
+
+La segmentación de clientes es una aplicación del aprendizaje automático no supervisado con gran utilidad en el mundo empresarial. 
+Esta técnica de \emph{clustering} --agrupamiento-- permite identificar grupos de individuos con comportamientos o perfiles similares con el propósito de diseñar estrategias de marketing personalizadas para mejorar la retención de clientes y optimizar los recursos disponibles.
+
+Como parte de la ingeniería de atributos, se construye el modelo RFM que consta de las siguientes variables:
+\begin{itemize}
+\item \textbf{Recencia} (R): Días transcurridos desde que el cliente realizó la última compra;
+\item \textbf{Frecuencia} (F): Número de órdenes únicas que el cliente realizó; y
+\item \textbf{Monto} (M): Gasto total de las compras realizadas por el cliente.
+\end{itemize}
+
+
+Dentro de las técnicas clásicas de \emph{clustering} se encuentran $k$-medias y agrupamiento espacial basado en densidad de aplicaciones con ruido (DBSCAN, por su equivalente en inglés \emph{Density-Based Spatial Clustering of Applications with Noise}).
+Surge entonces el interrogante de saber qué algoritmo de \emph{clustering} produce segmentos de clientes más coherentes, estables e interpretables a partir de datos transaccionales de \emph{e-commerce} y bajo qué condiciones cada enfoque resulta ser el más adecuado.
+Con este propósito, es necesario evaluar no solo el rendimiento técnico de las metodologías, sino también la interpretabilidad y utilidad en el ámbito de negocios de los segmentos resultantes.
+
+\section{Objetivos}
+
+El objetivo general de este trabajo es comparar el desempeño de $k$-medias y DBSCAN para la segmentación de clientes en un contexto de \emph{e-commerce}, evaluando métricas internas e interpretando las características de cada uno de los segmentos.
+
+
+Los objetivos específicos de este trabajo son: 
+\begin{itemize}
+\item Realizar la limpieza de un conjunto de datos público, como por ejemplo UCI Online Retail II, disponible en \url{https://archive.ics.uci.edu/dataset/502/online+retail+ii} y que contiene información sobre alrededor de un millón de transacciones de una tienda \emph{online} del Reino Unido.
+\item Calcular las variables del modelo RFM a partir de los datos transaccionales crudos.
+\item Aplicar y ajustar los algoritmos de \emph{clustering} a partir de la optimización de hiperparámetros mediantes grillas de búsqueda.
+\item Evaluar los resultados obtenidos a partir de  métricas específicas, como por ejemplo los índices de \emph{Silhouette}, Davies-Bouldin y Calinski-Harabasz.
+\item Analizar e interpretar los perfiles de cada segmento desde una perspectiva de negocio.
+\item Discutir las ventajas y limitaciones de cada algoritmo en el dominio de la presente aplicación.
+\end{itemize}
+\end{document}
