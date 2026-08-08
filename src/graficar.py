@@ -35,3 +35,17 @@ def graficarBarrasPaisesSinUK(resumenPaises, top_n=15):
     ruta = "graficos/barras_paises_sin_uk.png"
     plt.savefig(ruta, dpi=150)
     plt.show()
+
+
+def graficarCodo(resultados_k):
+    os.makedirs("graficos", exist_ok=True)
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(resultados_k["k"], resultados_k["inercia"], marker="o")
+    plt.xlabel("Cantidad de clusters (k)")
+    plt.ylabel("Inercia")
+    plt.title("Método del codo")
+    plt.xticks(resultados_k["k"])
+    plt.grid(True)
+    plt.savefig("graficos/codo_k.png", dpi=150)
+    plt.show()
