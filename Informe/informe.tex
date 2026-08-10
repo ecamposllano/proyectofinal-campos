@@ -35,6 +35,7 @@
 \usepackage{bm}
 \usepackage{makecell}
 \usepackage{placeins}
+\usepackage{rotating}
 
 
 
@@ -181,7 +182,7 @@
 	
 	El archivo original está compuesto por dos hojas de cálculo, correspondientes a los períodos 2009-2010 y 2010-2011 respectivamente. El módulo \texttt{cargarDatos.py} lee ambas hojas y las concatena en un único DataFrame antes de generar una copia local en formato \texttt{.csv}.
 	
-	Para la carga de los datos se desarrolló el módulo \texttt{cargarDatos.py}, que lee el archivo original en formato Excel (\texttt{.xlsx}) y lo convierte a un archivo \texttt{.csv} que se guarda como una copia local. En las ejecuciones siguientes, el módulo verifica si ya existe el archivo \texttt{.csv} y en caso afirmativo lo utiliza directamente en lugar de volver a leer el Excel original. Este mecanismo reduce significativamente el tiempo de carga, dado que la lectura de archivos Excel de gran tamaño es considerablemente más lenta que la de archivos CSV de igual contenido.
+	Para la carga de los datos se desarrolló un procedimiento que lee el archivo original en formato Excel (\texttt{.xlsx}) y lo convierte a un archivo \texttt{.csv} que se guarda como una copia local. En las ejecuciones siguientes, el proceso verifica si ya existe el archivo \texttt{.csv} y en caso afirmativo lo utiliza directamente en lugar de volver a leer el Excel original. Este mecanismo reduce significativamente el tiempo de carga, dado que la lectura de archivos Excel de gran tamaño es considerablemente más lenta que la de archivos CSV de igual contenido.
 	
 	El dataset original está compuesto por 1.067.371 registros y 8 características. Las fechas de las transacciones abarcan desde el 1 de diciembre de 2009 hasta el 9 de diciembre de 2011. Se identificaron 5942 clientes únicos y transacciones provenientes de 43 países distintos, con predominio de Reino Unido.
 	
@@ -197,7 +198,7 @@
 	
 	\subsection{Limpieza de datos}
 	
-	A partir del análisis inicial descrito en la sección anterior, se implementó el módulo \texttt{limpieza\_datos.py}, encargado de limpiar el dataset. La función \texttt{limpiarDatos} aplica los siguientes filtros:
+	A partir del análisis inicial descrito en la sección anterior, se procedió a limpiar el dataset, aplicando los siguientes filtros:
 	
 	\begin{enumerate}
 		\item \textbf{Eliminación de registros sin \texttt{Customer ID}}: dado que las transacciones sin identificador de cliente no pueden asociarse a ningún segmento y se descartan. \item \textbf{Eliminación de cancelaciones}: se eliminan las transacciones cuyo número de \texttt{Factura} comienza con la letra ``C'', correspondientes a cancelaciones.
@@ -205,7 +206,7 @@
 		\item \textbf{Eliminación de duplicados exactos}: se remueven los registros completamente duplicadas.
 	\end{enumerate}
 	
-	Para entender mejor el impacto de cada filtro, se armó la función \texttt{resumenLimpieza}, que cuenta por separado cuántos registros cumplen cada uno de estos motivos sobre el dataset original. Hay que tener en cuenta que estos motivos no son excluyentes: un mismo registro puede cumplir varios a la vez, por ejemplo, no tener \texttt{Cliente ID} y ser también una cancelación.
+	Para entender mejor el impacto de cada filtro, podemos observar la tabla ~\ref{tab:motivos_limpieza} que cuenta por separado cuántos registros cumplen cada uno de estos motivos sobre el dataset original. Hay que tener en cuenta que estos motivos no son excluyentes: un mismo registro puede cumplir varios a la vez, por ejemplo, no tener \texttt{Cliente ID} y ser también una cancelación.
 	
 	\begin{table}[H]
 		\centering
@@ -233,8 +234,7 @@
 	
 	\subsection{Distribución de transacciones y facturación por país}
 	
-	El dataset contiene registros de 43 países, con una concentración muy marcada en el Reino Unido. La Tabla~\ref{tab:distribucion-paises} resume, para los diez países con mayor facturación, la cantidad de registros y el importe total generado, en términos absolutos y porcentuales.
-	
+	El dataset contiene registros de 43 países pero, como se puede observar en la tabla ~\ref{tab:distribucion-paises}, hay una concentración muy marcada en el Reino Unido. El mismo concentra el 89.86\% de los registros del dataset y el 82.82\% de la facturación total.
 	\begin{table}[h]
 		\centering
 		\caption{Distribución de transacciones y facturación por país (top 10)}
@@ -257,8 +257,6 @@
 		\end{tabular}
 	\end{table}
 	
-	Reino Unido concentra el 89.86\% de los registros del dataset y
-	el 82.82\% de la facturación total.
 	
 	
 	La Figura~\ref{fig:barras-paises} muestra los 15 países con más transacciones. Como Reino Unido domina la escala del gráfico, se agrega también la Figura~\ref{fig:barras-paises-sin-uk}, sin Reino Unido, para poder ver mejor cómo se distribuye el resto de los países.
@@ -279,8 +277,7 @@
 	
 	\subsection{Comparación de comportamiento entre países}
 	
-	Para profundizar en el comportamiento de los clientes en los diferentes países, se compararon pares de países, calculando para cada uno: cantidad de filas, facturas únicas, clientes únicos, importe promedio, cantidad promedio, precio promedio, ticket promedio por factura, e ítems promedio por factura.
-	
+	Para ver si el comportamiento de compra cambia según el país, se compararon algunos de distintas regiones, tanto en cantidad de transacciones como en el valor de las mismas. En la Tabla \ref{tab:comparacion-paises} se presentan estas métricas para una selección de países de distinto tamaño y ubicación geográfica.
 	\begin{sidewaystable}
 		\centering
 		\caption{Comparación de métricas de compra entre países seleccionados}
@@ -305,11 +302,11 @@
 	
 	\begin{table}[h]
 		\centering
-		\caption{Comparación: United Kingdom vs. Resto del mundo}
+		\caption{Comparación: Reino Unido vs. Resto del mundo}
 		\label{tab:uk-resto}
 		\begin{tabular}{lrr}
 			\toprule
-			& United Kingdom & Resto del mundo \\
+			& Reino Unido & Resto del mundo \\
 			\midrule
 			Filas                          & 700{,}388 & 79{,}037 \\
 			Facturas únicas                & 33{,}541  & 3{,}428 \\
@@ -323,22 +320,215 @@
 		\end{tabular}
 	\end{table}
 	
-	\subsection{Discusión de resultados}
+	Las comparaciones muestran un patrón que se repite en la mayoría de los pares de países analizados: los países con menos clientes y transacciones tienen un ticket promedio por factura más alto que aquellos que tienen más cantidad de clientes y transacciones. El caso más marcado es el de Países Bajos frente a Alemania: con menos de un tercio de los registros (5{,}085 frente a 16{,}432), Países Bajos tiene un ticket promedio 4.5 veces mayor (2{,}429.99 contra 538.68). El caso de Francia y Alemania, ambos países tienen una cantidad de registros y facturas similares entre sí, es consistente con el patrón general, sus valores de ticket promedio e importe promedio por ítem también son parecidos entre sí, lo que refuerza la idea de que la diferencia de ticket promedio está más asociada al volumen relativo de cada país que a otro factor.
+
+	La comparación entre Reino Unido y el resto del mundo, presentada en la Tabla~\ref{tab:uk-resto}, resulta particularmente interesante. Reino Unido concentra el 89.86\% de las transacciones, pero el resto del mundo tiene un ticket promedio por factura de 870.94, más del doble que Reino Unido (429.00), y también más ítems promedio por factura (578.05 frente a 254.39). Esto sugiere que los clientes fuera de Reino Unido tienen, en promedio, un perfil de compra más parecido al de un mayorista o distribuidor, mientras que dentro de Reino Unido el comportamiento se parece más al de un consumidor minorista.
 	
-	Las comparaciones muestran un patrón que se repite en la mayoría de los pares de países analizados: los países con menos clientes y transacciones tienen un ticket promedio por factura más alto que aquellos que tienen más cantidad de clientes y transacciones (Tabla~\ref{tab:comparacion-paises}). El caso más marcado es el de Países Bajos frente a Alemania: con menos de un tercio de los registros (5{,}085 frente a 16{,}432), Países Bajos tiene un ticket promedio 4.5 veces mayor (2{,}429.99 contra 538.68). Se ve un patrón parecido, aunque menos marcado, entre Japón y Suiza, y entre Reino Unido y Lituania.
 	
-	En el caso de Francia y Alemania, ambos países tienen una cantidad de registros y facturas similares entre sí (a diferencia de los pares anteriores, donde uno de los dos era claramente más chico). Consistente con el patrón general, sus valores de ticket promedio e importe promedio por ítem también son parecidos entre sí, lo que refuerza la idea de que la diferencia de ticket promedio está más asociada al volumen relativo de cada país que a otro factor.
 	
-	La comparación entre Emiratos Árabes y Portugal refuerza el mismo patrón: aunque Emiratos Árabes tiene muchos menos registros, facturas y clientes que Portugal, su ticket promedio por factura es más alto (836.61 frente a 597.36) y tiene casi el doble de ítems promedio por factura (530.82 frente a 294.87).
+	\section{Cálculo de RFM}
 	
-	La comparación más interesante es la de Reino Unido contra el resto del mundo (Tabla~\ref{tab:uk-resto}). Reino Unido concentra el 89.86\% de las transacciones, pero el resto del mundo tiene un ticket promedio por factura de 870.94, más del doble que Reino Unido (429.00), y también más ítems promedio por factura (578.05 frente a 254.39). Esto sugiere que los clientes fuera de Reino Unido tienen, en promedio, un perfil de compra más parecido al de un mayorista o distribuidor, mientras que dentro de Reino Unido el comportamiento se parece más al de un consumidor minorista.
 	
+	A partir del dataset limpio y filtrado solamente con los registos pertenecientes a Reino Unido, se calcularon para cada cliente las tres variables que componen el mdoelo RFM:
+	
+	\begin{itemize}
+		\item \textbf{Recencia}: cantidad de días transcurridos entre la fecha de la última compra del cliente y una fecha de referencia fija, correspondiente al día posterior a la última transacción registrada en el dataset.
+		\item \textbf{Frecuencia}: cantidad de facturas únicas asociadas al cliente, es decir, la cantidad de compras distintas que realizó.
+		\item \textbf{Monto}: suma total del importe de todas las transacciones del cliente.
+	\end{itemize}
+	
+	Este cálculo se realizó unicamenye sobre los clientes de Reino Unido, dado que, como se discutió en la sección anterior, este segmento concentra la enorme mayoría de los registros y presenta un comportamiento de compra distinto al del resto del mundo, más parecido al de un consumidor minorista. El resultado es un conjunto de 5.350 clientes únicos, cada uno caracterizado por sus tres métricas RFM. La Tabla~\ref{tab:estadisticas-rfm} resume la distribución estadistica de estas variables.
+	
+	\begin{table}[H]
+		\centering
+		\caption{Estadísticas descriptivas de las variables RFM}
+		\label{tab:estadisticas-rfm}
+		\begin{tabular}{lrrr}
+			\toprule
+			& Recencia & Frecuencia & Monto \\
+			\midrule
+			Media    & 203.00 & 6.27  & 2{,}689.58 \\
+			Desvío estándar   & 209.96 & 12.00 & 11{,}706.53 \\
+			Mínimo   & 1      & 1     & 2.95 \\
+			25\%     & 26     & 1     & 330.20 \\
+			50\% (mediana) & 98.5 & 3   & 829.44 \\
+			75\%     & 382    & 7     & 2{,}156.25 \\
+			Máximo   & 739    & 336   & 580{,}987.04 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	
+	Las tres variables tienen una distribución bastante asimétrica: hay una diferencia grande entre la mediana, la media y el máximo. Esto se ve más que nada en Monto, donde la mediana es de \$829,44, la media sube a \$2.689,58 y el máximo llega a \$580.987,04. Esa diferencia tan grande muestra que hay clientes que compran mucho más que el resto.
+	
+	\subsection{Escalamiento de variables}
+	
+	Dado que las tres variables RFM se encuentran en escalas muy distintas entre sí (días, cantidad de compras, monto en dólares), fue necesario estandarizarlas antes de aplicar cualquier algoritmo de clustering. Si no se hacía esto, el Monto iba a dominar el cálculo de distancias entre clientes, ya que tiene una magnitud mucho mayor que la Recencia o la Frecuencia, y eso iba a distorsionar los resultados. Para esto se aplicó una estandarización de tipo \textit{z-score}, que a cada variable le resta su media y la divide por su desvío estándar, para que las tres queden centradas en cero y con varianza 1.
+	
+	\begin{table}[H]
+		\centering
+		\caption{Estadísticas descriptivas de las variables RFM luego del escalamiento}
+		\label{tab:estadisticas-rfm-escalado}
+		\begin{tabular}{lrrr}
+			\toprule
+			& Recencia & Frecuencia & Monto \\
+			\midrule
+			Media    & $\approx 0$ & $\approx 0$ & $\approx 0$ \\
+			Desvío estándar   & 1.00 & 1.00 & 1.00 \\
+			Mínimo   & -0.96 & -0.44 & -0.23 \\
+			25\%     & -0.84 & -0.44 & -0.20 \\
+			50\% (mediana) & -0.50 & -0.27 & -0.16 \\
+			75\%     & 0.85  & 0.06  & -0.05 \\
+			Máximo   & 2.55  & 27.49 & 49.40 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	Se observa en la Tabla~\ref{tab:estadisticas-rfm-escalado} que, aunque el escalamiento logra que las tres variables queden en un rango comparable en su parte central (media 0, desvío 1), los valores máximos de Frecuencia y Monto siguen siendo extremos (27.49 y 49.40 respectivamente). Esto confirma que la asimetría de estas variables no se corrigiódel todo con la estandarización, sino que responde a la presencia de un pequeño grupo de clientes con un comportamiento de compra muy por encima del resto.
+	
+	
+	
+	\section{Clustering}
+	
+	El objetivo general de este trabajo es comparar el desempeño de $k$-medias y DBSCAN para la segmentación de clientes en un contexto de \emph{e-commerce}, evaluando métricas internas e interpretando las características de cada uno de los segmentos. Además de estos dos algoritmos, se agregó HDBSCAN debido a que este algoritmo resuelve algunas de las limitaciones de DBSCAN, ya que no necesita un valor fijo de \texttt{eps} y se adapta mejor a densidades variables dentro del dataset.
+	
+	En las siguientes subsecciones se describe cómo se aplicó cada uno de los tres algoritmos sobre las variables RFM escaladas, y qué criterios se utilizaron para seleccionar sus respectivos parámetros.
+	
+	
+	\subsection{K-means}
+	
+	El primer algoritmo aplicado fue K-means, un método de clustering particional que agrupa las observaciones en $k$ clusters, buscando minimizar la distancia entre cada punto y el centroide de su cluster. A diferencia de DBSCAN y HDBSCAN, K-means requiere que se especifique de antemano la cantidad de clusters a formar, por lo que el primer paso fue determinar un valor adecuado de $k$. Para esto se utilizó el método del codo, que consiste en ejecutar el algoritmo con distintos valores de $k$ y registrar, en cada caso, la inercia resultante (la suma de las distancias al cuadrado entre cada punto y su centroide). A medida que $k$ aumenta, la inercia disminuye de forma natural, pero llega un punto en el que agregar clusters adicionales deja de aportar una mejora significativa. Ese punto de quiebre, visualizado como un "codo" en el gráfico, se toma como una buena referencia para elegir $k$.
+	
+	La Figura~\ref{fig:codo-k} muestra la inercia obtenida para valores de $k$ entre 2 y 10. Se ve una caída pronunciada hasta $k=4$ / $k=5$ y, a partir de ahi la curva se va aplanando considerablemente. Tomando esto como referencia, se probó el algoritmo tanto con $k=4$ como con $k=5$, para comparar ambas segmentaciones y evaluar cuál resulta más interpretable y mejor separada según las métricas internas.
+	
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{../graficos/codo_k.png}
+		\caption{Método del codo para la selección de $k$}
+		\label{fig:codo-k}
+	\end{figure}
+		
+		
+	\subsection{DBSCAN}
+	
+	El segundo algoritmo aplicado fue DBSCAN, un método de clustering basado en densidad que agrupa los puntos que están suficientemente cerca entre sí, y marca como ruido a los que quedan aislados. A diferencia de K-means, DBSCAN no necesita que se le indique de antemano la cantidad de clusters a formar; en cambio, requiere dos parámetros: \texttt{eps}, la distancia máxima entre dos puntos para que se consideren vecinos, y \texttt{min\_puntos}, la cantidad mínima de vecinos que necesita un punto para ser considerado parte de un cluster. Para elegir estos parámetros se hizo una búsqueda combinando distintos valores de \texttt{eps} y \texttt{min\_puntos}, y para cada combinación se registró la cantidad de clusters formados y la cantidad (y porcentaje) de puntos clasificados como ruido. Las primeras corridas, con valores de \texttt{eps} más altos, agrupaban a casi todos los clientes en un único cluster gigante, mientras que valores muy bajos de \texttt{eps} fragmentaban el dataset en decenas de clusters de apenas 3 o 4 clientes cada uno. Ninguno de estos dos extremos resulta útil para una segmentación interpretable. Se buscó entonces un punto intermedio que diera una cantidad razonable de clusters, con tamaños más parejos entre sí y sin un porcentaje de ruido excesivo. La combinación elegida fue \texttt{eps=0.2} y \texttt{min\_puntos=5}, que resultó en 4 clusters y un 3{,}40\% de puntos clasificados como ruido. 
+	
+	
+	\subsection{HDBSCAN}
+	
+	El tercer algoritmo que se aplicó fue HDBSCAN. A diferencia de DBSCAN, no hace falta fijarle un valor de \texttt{eps} de antemano este en cambio, construye una jerarquía de clusters a distintos niveles de densidad y selecciona automáticamente los clusters más estables de esa jerarquía. El parámetro principal es \texttt{min\_cluster\_size}, el tamaño mínimo que tiene que tener un grupo para considerarse un cluster; también se puede ajustar \texttt{min\_samples}, que regula qué tan estricto es el algoritmo a la hora de decidir qué es ruido. 
+	Al igual que con DBSCAN, se hizo una búsqueda combinando distintos valores de \texttt{min\_cluster\_size} y \texttt{min\_samples}. Con valores bajos de \texttt{min\_cluster\_size} (entre 10 y 100), el algoritmo formaba muchos clusters chicos, entre 50 y 115, algo poco útil para una segmentación interpretable. A medida que se subió \texttt{min\_cluster\_size}, la cantidad de clusters bajó de forma consistente, hasta llegar a valores más manejables (4 a 7 clusters) con \texttt{min\_cluster\_size} entre 300 y 500. Un aspecto que se mantuvo constante en toda la búsqueda fue el porcentaje de ruido, que se movió siempre entre 20\% y 39\% sin importar mucho la combinación de parámetros elegida. La combinación final elegida fue \texttt{min\_cluster\_size=500} y \texttt{min\_samples=3}, que dio 5 clusters con un 32{,}90\% de ruido. Este nivel de ruido no se interpreta como un error de calibración, sino como una característica real de los datos: HDBSCAN identifica que una parte considerable de los clientes no encaja de forma clara en ningún grupo, algo que DBSCAN y K-means no muestran porque fuerzan a todos los puntos a pertenecer a algún cluster.
 	
 	\chapter{Resultados y discusión}
 	\label{ch:resultados}
 	
+	\subsection{Resultados de K-means}
+	
+	Se ejecutó K-means con $k=4$ y con $k=5$, tal como se planteó en la metodología. Para cada cluster se calcularon los promedios de Recencia, Frecuencia y Monto, para poder interpretar qué tipo de cliente representa cada grupo.
+	
+	\subsubsection{K-means con $k=4$}
+	
+	\begin{table}[H]
+		\centering
+		\caption{Resumen de clusters — K-means con $k=4$}
+		\label{tab:kmeans-k4}
+		\begin{tabular}{lrrrr}
+			\toprule
+			Cluster & Clientes & Recencia prom. (días) & Frecuencia prom. & Monto prom. \\
+			\midrule
+			0 & 1{,}842 & 462.79 & 2.19   & 683.60 \\
+			1 & 34    & 26.26  & 104.62 & 80{,}479.43 \\
+			2 & 3{,}473 & 67.00  & 7.43   & 2{,}825.44 \\
+			3 & 1     & 1.00   & 145.00 & 580{,}987.04 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	Como podemos ver en la Tabla~\ref{tab:kmeans-k4}, el cluster 2 es el más numeroso, con 3.473 clientes: compran cada dos meses aproximadamente y gastan en promedio \$2.825,44, un perfil de cliente activo y regular. El cluster 0, con 1.842 clientes, agrupa a quienes hace mucho que no compran (462 días en promedio) y con un gasto bajo, lo que sugiere clientes inactivos o perdidos. El cluster 1, más chico (34 clientes), es el grupo de mayor valor: compran seguido (más de 100 facturas en promedio) y gastan muy por encima del resto, cerca de \$80.479 en promedio. Por último, el cluster 3 queda formado por un único cliente, con un monto total de \$580.987,04 y 145 facturas, muy por encima de cualquier otro cliente de la base. Este resultado es consistente con lo discutido en la sección de escalamiento, donde ya se había identificado la presencia de un cliente con un volumen de compra extremo respecto al resto.
+	
+	\subsubsection{K-means con $k=5$}
+	
+	
+	\begin{table}[H]
+		\centering
+		\caption{Resumen de clusters — K-means con $k=5$}
+		\label{tab:kmeans-k5}
+		\begin{tabular}{lrrrr}
+			\toprule
+			Cluster & Clientes & Recencia prom. (días) & Frecuencia prom. & Monto prom. \\
+			\midrule
+			0 & 3{,}240 & 74.82  & 5.36   & 1{,}794.78 \\
+			1 & 21    & 23.86  & 125.62 & 103{,}602.85 \\
+			2 & 1{,}773 & 470.49 & 2.17   & 678.72 \\
+			3 & 315   & 28.48  & 30.31  & 14{,}647.99 \\
+			4 & 1     & 1.00   & 145.00 & 580{,}987.04 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	Podemos ver en la Tabla~\ref{tab:kmeans-k5} que con $k=5$, los clusters de clientes inactivos (cluster 2) y de clientes regulares (cluster 0) se mantienen prácticamente iguales a los obtenidos con $k=4$. La diferencia más importante está en el cluster de alto valor que teníamos con $k=4$ el cual aquí se divide en dos. Por un lado queda un grupo chico de 21 clientes con un comportamiento de compra extremo, con 125 facturas y \$103.602 de gasto promedio. Por otro lado queda un grupo más grande, de 315 clientes, que también compran seguido y gastan bastante (30 facturas y \$14.647,99 en promedio), pero no tanto como el grupo anterior. Esto permite ver con más detalle a los clientes de mayor valor, algo que con $k=4$ quedaba todo junto en un solo cluster.
+	
+	
+	
+	\subsection{Resultados de DBSCAN}
+	
+	\begin{table}[H]
+		\centering
+		\caption{Resumen de clusters — DBSCAN (eps=0.2, min\_puntos=5)}
+		\label{tab:dbscan-resumen}
+		\begin{tabular}{lrrrr}
+			\toprule
+			Cluster & Clientes & Recencia prom. (días) & Frecuencia prom. & Monto prom. \\
+			\midrule
+			Ruido ($-1$) & 182   & 126.33 & 42.05 & 32{,}350.80 \\
+			0             & 5{,}153 & 205.49 & 4.98  & 1{,}638.17 \\
+			1             & 7     & 324.57 & 12.00 & 4{,}051.40 \\
+			2             & 4     & 71.50  & 28.50 & 3{,}881.86 \\
+			3             & 4     & 405.25 & 11.50 & 4{,}004.72 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	En la Tabla~\ref{tab:dbscan-resumen}, que muestra el resumen de los clusters que se obtuvo con estos parámetros, incluyendo el grupo de ruido (etiqueta $-1$), se ve el problema: el cluster 0 se queda con 5.153 de los 5.350 clientes, casi todos los registros. Los clusters 1, 2 y 3 son grupos de 4 a 7 clientes solamnete, así que no sirven mucho para segmentar. Lo más llamativo pasa en el grupo de ruido. Esos 182 clientes tienen en promedio 42 compras y \$32.350,80 de monto, muy por encima del resto. O sea, DBSCAN no armó un cluster para los clientes de mayor valor, sino que los dejó afuera como ruido, porque no cumplían el criterio de densidad que fijan \texttt{eps} y \texttt{min\_puntos}.
+	
+	Esto muestra una limitación de DBSCAN con este tipo de datos: como usa un solo valor de \texttt{eps} para todo el dataset, no logra adaptarse tanto a la zona densa de clientes habituales como a los clientes con comportamiento extremo. Estos últimos terminan casi todos como ruido en vez de agruparse. Esta limitación es la que lleva a probar HDBSCAN en la siguiente sección.
+	
+	
+	\subsection{Resultados de HDBSCAN}
+	
+	\begin{table}[H]
+		\centering
+		\caption{Resumen de clusters — HDBSCAN (min\_cluster\_size=500, min\_samples=3)}
+		\label{tab:hdbscan-resumen}
+		\begin{tabular}{lrrrr}
+			\toprule
+			Cluster & Clientes & Recencia prom. (días) & Frecuencia prom. & Monto prom. \\
+			\midrule
+			Ruido ($-1$) & 1{,}760 & 227.15 & 13.00 & 6{,}401.98 \\
+			0             & 550   & 48.21  & 7.20  & 2{,}176.17 \\
+			1             & 1{,}146 & 122.09 & 3.74  & 1{,}072.27 \\
+			2             & 520   & 108.38 & 2.00  & 599.32 \\
+			3             & 627   & 133.36 & 1.00  & 300.04 \\
+			4             & 747   & 508.52 & 1.00  & 262.74 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	A diferencia de DBSCAN, se puede obsevar en la Tabla~\ref{tab:hdbscan-resumen}, que acá los clusters tienen tamaños mucho más parejos, entre 520 y 1.146 clientes cada uno, y se pueden diferenciar bastante bien entre sí. El cluster 0 agrupa a los clientes más activos: compraron hace poco (48 días en promedio) y con una frecuencia relativamente alta (7.2 compras). El cluster 4, en el otro extremo, junta a los clientes más inactivos: hace más de 500 días que no compran y solo hicieron una compra en total. Los clusters 2 y 3 son parecidos entre sí, ambos con clientes de baja frecuencia (1 a 2 compras) y montos bajos, pero se diferencian en la recencia. El grupo de ruido vuelve a ser el más interesante: son 1.760 clientes, casi un tercio de la base, con un monto promedio de \$6.401,98, muy por encima de cualquiera de los clusters formados. Esto confirma lo que se planteó en la metodología: HDBSCAN no fuerza a estos clientes de comportamiento más variado a entrar en algún grupo, sino que los deja afuera como puntos que no encajan claramente en ninguna densidad definida. A diferencia de DBSCAN, acá el grupo de ruido no se lleva puestos a los clientes de mayor valor de forma tan desproporcionada, sino que representa un conjunto más amplio y heterogéneo de clientes con comportamientos atípicos.
+
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../graficos/jerarquia_clusters.png}
+		\caption{Jerarquía de clusters construida por HDBSCAN}
+		\label{fig:jerarquia-hdbscan}
+	\end{figure}
+	
+	La Figura~\ref{fig:jerarquia-hdbscan} muestra el árbol condensado que construye HDBSCAN a partir del árbol de expansión mínima. En esta figura, el eje vertical representa el valor de $\lambda$ (inversamente proporcional a la distancia), y el ancho de cada rama indica la cantidad de puntos que la componen. Se puede ver cómo, a medida que aumenta $\lambda$ es decir, a medida que se pide más densidad, todos los clientes se van separando en ramas cada vez más finas. Al principio del gráfico se desprende una rama ancha que junta a la mayoría de los clientes, y más abajo esa rama se divide en varias más chicas que llegan hasta el final del árbol. Esas son las que HDBSCAN termina eligiendo como clusters finales. Las ramas que se cortan antes de llegar al final son agrupaciones que el algoritmo no consideró lo bastante estables como para ser un cluster, y esos puntos terminan como ruido.
 	
 	\chapter{Conclusiones}
+	
 	
 	\bibliographystyle{plain}
 	\bibliography{Referencias}

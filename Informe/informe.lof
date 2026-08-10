@@ -2,6 +2,8 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Top 15 países por cantidad de transacciones}}{15}{figure.caption.7}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Top 15 países por cantidad de transacciones (excluyendo Reino Unido)}}{16}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Top 15 países por cantidad de transacciones (excluyendo Reino Unido)}}{17}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Método del codo para la selección de $k$}}{20}{figure.caption.13}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Jerarquía de clusters construida por HDBSCAN}}{25}{figure.caption.18}%
 \addvspace {10\p@ }

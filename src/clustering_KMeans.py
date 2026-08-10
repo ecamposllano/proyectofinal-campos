@@ -23,3 +23,14 @@ def aplicarKMeans(rfm, rfm_escalado, k):
     print(rfm_con_cluster["Cluster_KMeans"].value_counts().sort_index())
 
     return rfm_con_cluster, kmeans
+
+
+def resumenKMeans(rfm_k):
+    resumen = rfm_k.groupby("Cluster_KMeans").agg(
+        cantidad_clientes=("Customer ID", "count"),
+        recencia_promedio=("Recencia", "mean"),
+        frecuencia_promedio=("Frecuencia", "mean"),
+        monto_promedio=("Monto", "mean")
+    ).reset_index()
+
+    print(resumen)

@@ -4,10 +4,10 @@ from src.cargar_datos import cargarDatos
 from src.analisis_inicial import resumenInicial
 from src.limpieza import limpiarDatos,resumenLimpieza
 from src.analisis_paises import analisisPaises, compararPaises
-from src.graficar import graficarBarrasPaises, graficarBarrasPaisesSinUK, graficarCodo
+from src.graficar import graficarBarrasPaises, graficarBarrasPaisesSinUK, graficarCodo, graficarArbolExpansionMinima, graficarJerarquiaClusters
 from src.rfm import calcularRFM, resumenRFM
 from src.escalamiento import escalarDatos, resumenEscalamiento
-from src.clustering_KMeans import buscarKOptimo, aplicarKMeans
+from src.clustering_KMeans import buscarKOptimo, aplicarKMeans, resumenKMeans
 from src.clustering_DBSCAN import buscarParametrosDBSCAN, aplicarDBSCAN
 from src.clustering_HDBSCAN import buscarParametrosHDBSCAN, aplicarHDBSCAN
 
@@ -15,14 +15,14 @@ from src.clustering_HDBSCAN import buscarParametrosHDBSCAN, aplicarHDBSCAN
 def main():
     # CARGA DE DATOS
     df = cargarDatos("datos/online_retail_II.xlsx")
-    """
+
     # AUDITORIA DE CALIDAD
     resumenInicial(df)
-    """
+
     # LIMPIEZA DEL DATASET
     df_limpio = limpiarDatos(df)
-#    resumenLimpieza(df, df_limpio)
-    """
+    resumenLimpieza(df, df_limpio)
+
     # DISTRIBUCION DE PAISES EN EL DATASET
     resumenPaises = analisisPaises(df_limpio)
     graficarBarrasPaises(resumenPaises)
@@ -35,10 +35,10 @@ def main():
     compararPaises(df_limpio, "United Arab Emirates", "Portugal")
     compararPaises(df_limpio, "Netherlands", "Germany")
     compararPaises(df_limpio, "Japan", "Switzerland")
-    """
+
     df_uk = df_limpio.copy()
     df_uk["Country"] = np.where(df_uk["Country"] == "United Kingdom", "United Kingdom", "Resto del mundo")
-    #compararPaises(df_uk, "United Kingdom", "Resto del mundo")
+    compararPaises(df_uk, "United Kingdom", "Resto del mundo")
 
     df_uk = df_uk[df_uk["Country"] == "United Kingdom"]
 
@@ -55,7 +55,9 @@ def main():
     graficarCodo(resultados_k)
 
     rfm_kmeans4, modelo_kmeans4 = aplicarKMeans(rfm, rfm_escalado, k=4)
+    resumenKMeans(rfm_kmeans4)
     rfm_kmeans5, modelo_kmeans5 = aplicarKMeans(rfm, rfm_escalado, k=5)
+    resumenKMeans(rfm_kmeans5)
 
     # CLUSTERING - DBSCAN
     resultados_dbscan = buscarParametrosDBSCAN(
@@ -65,7 +67,16 @@ def main():
     )
     print(resultados_dbscan)
 
-    rfm_dbscan, modelo_dbscan = aplicarDBSCAN(rfm, rfm_escalado, eps=1.5, min_puntos=3)
+    rfm_dbscan, modelo_dbscan = aplicarDBSCAN(rfm, rfm_escalado, eps=0.2, min_puntos=5)
+
+    resumen_dbscan = rfm_dbscan.groupby("Cluster_DBSCAN").agg(
+        cantidad_clientes=("Customer ID", "count"),
+        recencia_promedio=("Recencia", "mean"),
+        frecuencia_promedio=("Frecuencia", "mean"),
+        monto_promedio=("Monto", "mean")
+    ).reset_index()
+
+    print(resumen_dbscan)
 
     # CLUSTERING - HDBSCAN
     resultados_hdbscan = buscarParametrosHDBSCAN(
@@ -74,6 +85,19 @@ def main():
         min_puntos_valores=[1, 2, 3, 5, 10]
     )
     print(resultados_hdbscan)
+
+    rfm_hdbscan, modelo_hdbscan = aplicarHDBSCAN(rfm, rfm_escalado, min_cluster_size=500, min_puntos=3)
+    graficarArbolExpansionMinima(modelo_hdbscan)
+    graficarJerarquiaClusters(modelo_hdbscan)
+
+    resumen_hdbscan = rfm_hdbscan.groupby("Cluster_HDBSCAN").agg(
+        cantidad_clientes=("Customer ID", "count"),
+        recencia_promedio=("Recencia", "mean"),
+        frecuencia_promedio=("Frecuencia", "mean"),
+        monto_promedio=("Monto", "mean")
+    ).reset_index()
+
+    print(resumen_hdbscan)
 
 if __name__ == "__main__":
     main()

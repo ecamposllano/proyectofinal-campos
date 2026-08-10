@@ -49,3 +49,26 @@ def graficarCodo(resultados_k):
     plt.grid(True)
     plt.savefig("graficos/codo_k.png", dpi=150)
     plt.show()
+
+ 
+def graficarArbolExpansionMinima(clusterer):
+    os.makedirs("graficos", exist_ok=True)
+    plt.figure(figsize=(10, 8))
+    clusterer.minimum_spanning_tree_.plot(
+        edge_cmap="viridis",
+        edge_alpha=0.6,
+        node_size=5,
+        edge_linewidth=1
+    )
+    plt.title("Árbol de expansión mínima (HDBSCAN)")
+    plt.savefig("graficos/arbol_expansion_minima.png", dpi=150, bbox_inches="tight")
+    plt.show()
+
+
+def graficarJerarquiaClusters(clusterer):
+    os.makedirs("graficos", exist_ok=True)
+    plt.figure(figsize=(12, 8))
+    clusterer.condensed_tree_.plot()
+    plt.title("Jerarquía de clusters (HDBSCAN)")
+    plt.savefig("graficos/jerarquia_clusters.png", dpi=150, bbox_inches="tight")
+    plt.show()
