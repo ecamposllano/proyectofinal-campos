@@ -8,8 +8,8 @@
 \contentsline {table}{\numberline {2.5}{\ignorespaces Estadísticas descriptivas de las variables RFM}}{18}{table.caption.11}%
 \contentsline {table}{\numberline {2.6}{\ignorespaces Estadísticas descriptivas de las variables RFM luego del escalamiento}}{19}{table.caption.12}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Resumen de clusters — K-means con $k=4$}}{23}{table.caption.14}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Resumen de clusters — K-means con $k=5$}}{24}{table.caption.15}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Resumen de clusters — DBSCAN (eps=0.2, min\_puntos=5)}}{24}{table.caption.16}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Resumen de clusters — HDBSCAN (min\_cluster\_size=500, min\_samples=3)}}{25}{table.caption.17}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Resumen de clusters: K-means con $k=4$}}{23}{table.caption.14}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Resumen de clusters: K-means con $k=5$}}{24}{table.caption.15}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Resumen de clusters: DBSCAN (eps=0.2, min\_puntos=5)}}{24}{table.caption.16}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Resumen de clusters: HDBSCAN (min\_cluster\_size=500, min\_samples=3)}}{25}{table.caption.17}%
 \addvspace {10\p@ }

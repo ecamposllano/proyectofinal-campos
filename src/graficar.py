@@ -72,3 +72,30 @@ def graficarJerarquiaClusters(clusterer):
     plt.title("Jerarquía de clusters (HDBSCAN)")
     plt.savefig("graficos/jerarquia_clusters.png", dpi=150, bbox_inches="tight")
     plt.show()
+
+
+def graficarRFM3D(rfm, etiquetas=None, titulo="Distribución de clientes según RFM", nombre_archivo="rfm_3d.png"):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection="3d")
+
+    scatter = ax.scatter(
+        rfm["Recencia"],
+        rfm["Frecuencia"],
+        rfm["Monto"],
+        c=etiquetas,
+        cmap="viridis",
+        s=10,
+        alpha=0.6
+    )
+
+    ax.set_xlabel("Recencia (días)")
+    ax.set_ylabel("Frecuencia")
+    ax.set_zlabel("Monto")
+    ax.set_title(titulo)
+
+    if etiquetas is not None:
+        legend = ax.legend(*scatter.legend_elements(), title="Cluster")
+        ax.add_artist(legend)
+
+    plt.savefig(f"graficos/{nombre_archivo}", dpi=150, bbox_inches="tight")
+    plt.show()
