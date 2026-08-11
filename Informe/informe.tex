@@ -418,7 +418,7 @@
 	\subsection{HDBSCAN}
 	
 	El tercer algoritmo que se aplicó fue HDBSCAN. A diferencia de DBSCAN, no hace falta fijarle un valor de \texttt{eps} de antemano este en cambio, construye una jerarquía de clusters a distintos niveles de densidad y selecciona automáticamente los clusters más estables de esa jerarquía. El parámetro principal es \texttt{min\_cluster\_size}, el tamaño mínimo que tiene que tener un grupo para considerarse un cluster; también se puede ajustar \texttt{min\_samples}, que regula qué tan estricto es el algoritmo a la hora de decidir qué es ruido. 
-	Al igual que con DBSCAN, se hizo una búsqueda combinando distintos valores de \texttt{min\_cluster\_size} y \texttt{min\_samples}. Con valores bajos de \texttt{min\_cluster\_size} (entre 10 y 100), el algoritmo formaba muchos clusters chicos, entre 50 y 115, algo poco útil para una segmentación interpretable. A medida que se subió \texttt{min\_cluster\_size}, la cantidad de clusters bajó de forma consistente, hasta llegar a valores más manejables (4 a 7 clusters) con \texttt{min\_cluster\_size} entre 300 y 500. Un aspecto que se mantuvo constante en toda la búsqueda fue el porcentaje de ruido, que se movió siempre entre 20\% y 39\% sin importar mucho la combinación de parámetros elegida. La combinación final elegida fue \texttt{min\_cluster\_size=500} y \texttt{min\_samples=3}, que dio 5 clusters con un 32{,}90\% de ruido. Este nivel de ruido no se interpreta como un error de calibración, sino como una característica real de los datos: HDBSCAN identifica que una parte considerable de los clientes no encaja de forma clara en ningún grupo, algo que DBSCAN y K-means no muestran porque fuerzan a todos los puntos a pertenecer a algún cluster.
+	Al igual que con DBSCAN, se hizo una búsqueda combinando distintos valores de \texttt{min\_cluster\_size} y \texttt{min\_samples}. Con valores bajos de \texttt{min\_cluster\_size} (entre 10 y 100), el algoritmo formaba muchos clusters chicos, entre 50 y 115, algo poco útil para una segmentación interpretable. A medida que se subió \texttt{min\_cluster\_size}, la cantidad de clusters bajó de forma consistente, hasta llegar a valores más manejables (4 a 7 clusters) con \texttt{min\_cluster\_size} entre 300 y 500. Un aspecto que se mantuvo constante en toda la búsqueda fue el porcentaje de ruido, que se movió siempre entre 20\% y 39\% sin importar mucho la combinación de parámetros elegida. La combinación final elegida fue \texttt{min\_cluster\_size=500} y \texttt{min\_samples=3}, que dio 5 clusters con un 32{,}90\% de ruido. Este nivel de ruido puede interpretarse no como un error en la eleccion de parámetros, sino como una característica real de los datos: HDBSCAN identifica que una parte considerable de los clientes no encaja de forma clara en ningún grupo, algo que K-means no muestra porque fuerza a todos los puntos a pertenecer a algún cluster.
 	
 	\chapter{Resultados y discusión}
 	\label{ch:resultados}
@@ -431,7 +431,7 @@
 	
 	\begin{table}[H]
 		\centering
-		\caption{Resumen de clusters — K-means con $k=4$}
+		\caption{Resumen de clusters: K-means con $k=4$}
 		\label{tab:kmeans-k4}
 		\begin{tabular}{lrrrr}
 			\toprule
@@ -445,14 +445,14 @@
 		\end{tabular}
 	\end{table}
 	
-	Como podemos ver en la Tabla~\ref{tab:kmeans-k4}, el cluster 2 es el más numeroso, con 3.473 clientes: compran cada dos meses aproximadamente y gastan en promedio \$2.825,44, un perfil de cliente activo y regular. El cluster 0, con 1.842 clientes, agrupa a quienes hace mucho que no compran (462 días en promedio) y con un gasto bajo, lo que sugiere clientes inactivos o perdidos. El cluster 1, más chico (34 clientes), es el grupo de mayor valor: compran seguido (más de 100 facturas en promedio) y gastan muy por encima del resto, cerca de \$80.479 en promedio. Por último, el cluster 3 queda formado por un único cliente, con un monto total de \$580.987,04 y 145 facturas, muy por encima de cualquier otro cliente de la base. Este resultado es consistente con lo discutido en la sección de escalamiento, donde ya se había identificado la presencia de un cliente con un volumen de compra extremo respecto al resto.
+	Como podemos ver en la Tabla~\ref{tab:kmeans-k4}, el cluster 2 es el más numeroso, con 3.473 clientes: compran cada dos meses aproximadamente y gastan en promedio \$2.825,44, un perfil de cliente activo y regular. El cluster 0, con 1.842 clientes, agrupa a quienes hace mucho que no compran (462 días en promedio) y con un gasto bajo, lo que sugiere clientes inactivos o perdidos. El cluster 1, más chico (34 clientes), es el grupo de mayor valor: compran seguido (más de 100 facturas en promedio) y gastan muy por encima del resto, cerca de \$80.479 en promedio. Por último, el cluster 3 queda formado por un único cliente, con un monto total de \$580.987,04 y 145 facturas, muy por encima de cualquier otro cliente de la base. Este resultado es consistente con lo discutido en la sección de escalamiento, donde ya se había identificado la presencia de un cliente con valores de compra extremos respecto al resto.
 	
 	\subsubsection{K-means con $k=5$}
 	
 	
 	\begin{table}[H]
 		\centering
-		\caption{Resumen de clusters — K-means con $k=5$}
+		\caption{Resumen de clusters: K-means con $k=5$}
 		\label{tab:kmeans-k5}
 		\begin{tabular}{lrrrr}
 			\toprule
@@ -467,7 +467,7 @@
 		\end{tabular}
 	\end{table}
 	
-	Podemos ver en la Tabla~\ref{tab:kmeans-k5} que con $k=5$, los clusters de clientes inactivos (cluster 2) y de clientes regulares (cluster 0) se mantienen prácticamente iguales a los obtenidos con $k=4$. La diferencia más importante está en el cluster de alto valor que teníamos con $k=4$ el cual aquí se divide en dos. Por un lado queda un grupo chico de 21 clientes con un comportamiento de compra extremo, con 125 facturas y \$103.602 de gasto promedio. Por otro lado queda un grupo más grande, de 315 clientes, que también compran seguido y gastan bastante (30 facturas y \$14.647,99 en promedio), pero no tanto como el grupo anterior. Esto permite ver con más detalle a los clientes de mayor valor, algo que con $k=4$ quedaba todo junto en un solo cluster.
+	Por ootro lado, podemos ver en la Tabla~\ref{tab:kmeans-k5} que con $k=5$, los clusters de clientes inactivos (cluster 2) y de clientes regulares (cluster 0) se mantienen prácticamente iguales a los obtenidos con $k=4$. La diferencia más importante está en el cluster de alto valor que teníamos con $k=4$ el cual aquí se divide en dos. Por un lado queda un grupo chico de 21 clientes con un comportamiento de compra extremo, con 125 facturas y \$103.602 de gasto promedio. Por otro lado queda un grupo más grande, de 315 clientes, que también compran seguido y gastan bastante (30 facturas y \$14.647,99 en promedio), pero no tanto como el grupo anterior. Esto permite ver con más detalle a los clientes de mayor valor, algo que con $k=4$ quedaba todo junto en un solo cluster. Al igual que con $k=4$, aparece el cluster 4 que contiene solamente al mismo cliente con valores muy altos.
 	
 	
 	
@@ -475,7 +475,7 @@
 	
 	\begin{table}[H]
 		\centering
-		\caption{Resumen de clusters — DBSCAN (eps=0.2, min\_puntos=5)}
+		\caption{Resumen de clusters: DBSCAN (eps=0.2, min\_puntos=5)}
 		\label{tab:dbscan-resumen}
 		\begin{tabular}{lrrrr}
 			\toprule
@@ -499,7 +499,7 @@
 	
 	\begin{table}[H]
 		\centering
-		\caption{Resumen de clusters — HDBSCAN (min\_cluster\_size=500, min\_samples=3)}
+		\caption{Resumen de clusters: HDBSCAN (min\_cluster\_size=500, min\_samples=3)}
 		\label{tab:hdbscan-resumen}
 		\begin{tabular}{lrrrr}
 			\toprule
@@ -515,7 +515,7 @@
 		\end{tabular}
 	\end{table}
 	
-	A diferencia de DBSCAN, se puede obsevar en la Tabla~\ref{tab:hdbscan-resumen}, que acá los clusters tienen tamaños mucho más parejos, entre 520 y 1.146 clientes cada uno, y se pueden diferenciar bastante bien entre sí. El cluster 0 agrupa a los clientes más activos: compraron hace poco (48 días en promedio) y con una frecuencia relativamente alta (7.2 compras). El cluster 4, en el otro extremo, junta a los clientes más inactivos: hace más de 500 días que no compran y solo hicieron una compra en total. Los clusters 2 y 3 son parecidos entre sí, ambos con clientes de baja frecuencia (1 a 2 compras) y montos bajos, pero se diferencian en la recencia. El grupo de ruido vuelve a ser el más interesante: son 1.760 clientes, casi un tercio de la base, con un monto promedio de \$6.401,98, muy por encima de cualquiera de los clusters formados. Esto confirma lo que se planteó en la metodología: HDBSCAN no fuerza a estos clientes de comportamiento más variado a entrar en algún grupo, sino que los deja afuera como puntos que no encajan claramente en ninguna densidad definida. A diferencia de DBSCAN, acá el grupo de ruido no se lleva puestos a los clientes de mayor valor de forma tan desproporcionada, sino que representa un conjunto más amplio y heterogéneo de clientes con comportamientos atípicos.
+	A diferencia de DBSCAN, se puede obsevar en la Tabla~\ref{tab:hdbscan-resumen} que acá los clusters tienen tamaños mucho más parejos, entre 520 y 1.146 clientes cada uno, y se pueden diferenciar bastante bien entre sí. El cluster 0 agrupa a los clientes más activos: compraron hace poco (48 días en promedio) y con una frecuencia relativamente alta (7.2 compras). El cluster 4, en el otro extremo, junta a los clientes más inactivos: hace más de 500 días que no compran y solo hicieron una compra en total. Los clusters 2 y 3 son parecidos entre sí, ambos con clientes de baja frecuencia (1 a 2 compras) y montos bajos, pero se diferencian en la recencia. El grupo de ruido vuelve a ser el más interesante: son 1.760 clientes, casi un tercio de los registros totales, con un monto promedio de \$6.401,98, muy por encima de cualquiera de los clusters formados. Esto confirma lo que se planteó en la metodología: HDBSCAN no fuerza a estos clientes de comportamiento más variado a entrar en algún grupo, sino que los deja afuera como puntos que no encajan claramente en ninguna densidad definida. A diferencia de DBSCAN, acá el grupo de ruido no se lleva puestos a los clientes de mayor valor de forma tan desproporcionada, sino que representa un conjunto más amplio y heterogéneo de clientes con comportamientos atípicos.
 
 	
 	\begin{figure}[H]
