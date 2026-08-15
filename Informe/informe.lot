@@ -1,15 +1,18 @@
 \babel@toc {spanish}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {2.1}{\ignorespaces Cantidad de registros afectados por cada motivo de limpieza (dataset original).}}{14}{table.caption.5}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces Distribución de transacciones y facturación por país (top 10)}}{15}{table.caption.6}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces Comparación de métricas de compra entre países seleccionados}}{16}{table.caption.9}%
-\contentsline {table}{\numberline {2.4}{\ignorespaces Comparación: Reino Unido vs. Resto del mundo}}{18}{table.caption.10}%
-\contentsline {table}{\numberline {2.5}{\ignorespaces Estadísticas descriptivas de las variables RFM}}{18}{table.caption.11}%
-\contentsline {table}{\numberline {2.6}{\ignorespaces Estadísticas descriptivas de las variables RFM luego del escalamiento}}{19}{table.caption.12}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Cantidad de registros afectados por cada motivo de limpieza (dataset original).}}{8}{table.caption.5}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Distribución de transacciones y facturación por país (top 10)}}{9}{table.caption.6}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Comparación de métricas de compra entre países seleccionados}}{10}{table.caption.9}%
+\contentsline {table}{\numberline {2.4}{\ignorespaces Comparación: Reino Unido vs. Resto del mundo}}{12}{table.caption.10}%
+\contentsline {table}{\numberline {2.5}{\ignorespaces Estadísticas descriptivas de las variables RFM}}{12}{table.caption.11}%
+\contentsline {table}{\numberline {2.6}{\ignorespaces Estadísticas descriptivas de las variables RFM luego del escalamiento}}{13}{table.caption.12}%
+\contentsline {table}{\numberline {2.7}{\ignorespaces Grid search de parámetros para DBSCAN.}}{15}{table.caption.15}%
+\contentsline {table}{\numberline {2.8}{\ignorespaces Grid search de parámetros para HDBSCAN.}}{16}{table.caption.16}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Resumen de clusters: K-means con $k=4$}}{23}{table.caption.14}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Resumen de clusters: K-means con $k=5$}}{24}{table.caption.15}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Resumen de clusters: DBSCAN (eps=0.2, min\_puntos=5)}}{24}{table.caption.16}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Resumen de clusters: HDBSCAN (min\_cluster\_size=500, min\_samples=3)}}{25}{table.caption.17}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Resumen de clusters: K-means con $k=4$}}{18}{table.caption.18}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Resumen de clusters: K-means con $k=5$}}{20}{table.caption.25}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Resumen de clusters: DBSCAN (eps=0.2, min\_puntos=5)}}{21}{table.caption.32}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Resumen de clusters: HDBSCAN (min\_cluster\_size=500, min\_samples=3)}}{22}{table.caption.37}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Perfil de los clusters obtenidos con HDBSCAN (\textit {min\_cluster\_size}=200, \textit {min\_samples}=1).}}{24}{table.caption.45}%
 \addvspace {10\p@ }

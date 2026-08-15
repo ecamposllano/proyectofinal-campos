@@ -1,5 +1,6 @@
 import os
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def graficarBarrasPaises(resumenPaises, top_n=15):
@@ -78,24 +79,102 @@ def graficarRFM3D(rfm, etiquetas=None, titulo="Distribución de clientes según 
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111, projection="3d")
 
-    scatter = ax.scatter(
-        rfm["Recencia"],
-        rfm["Frecuencia"],
-        rfm["Monto"],
-        c=etiquetas,
-        cmap="viridis",
-        s=10,
-        alpha=0.6
-    )
+    clusters_unicos = sorted(etiquetas.unique())
+    colores = plt.cm.tab10.colors
+
+    for i, cluster in enumerate(clusters_unicos):
+        mask = etiquetas == cluster
+        ax.scatter(
+            rfm.loc[mask, "Recencia"],
+            rfm.loc[mask, "Frecuencia"],
+            rfm.loc[mask, "Monto"],
+            color=colores[i],
+            s=10,
+            alpha=0.6,
+            label=f'Cluster {cluster}'
+        )
 
     ax.set_xlabel("Recencia (días)")
     ax.set_ylabel("Frecuencia")
     ax.set_zlabel("Monto")
     ax.set_title(titulo)
+    ax.legend(title='Cluster')
+    plt.savefig(f"graficos/{nombre_archivo}")
+    plt.show()
 
-    if etiquetas is not None:
-        legend = ax.legend(*scatter.legend_elements(), title="Cluster")
-        ax.add_artist(legend)
 
-    plt.savefig(f"graficos/{nombre_archivo}", dpi=150, bbox_inches="tight")
+def graficarBoxplotRFMEscalado(rfm_escalado):
+    columnas_rfm = ['Recencia', 'Frecuencia', 'Monto']
+    
+    plt.figure(figsize=(8, 6))
+    rfm_escalado[columnas_rfm].boxplot()
+    plt.title('Distribucion de variables RFM escaladas')
+    plt.ylabel('Valor escalado (z-score)')
+    plt.xlabel('Variable')
+    plt.grid(True, alpha=0.3)
+    plt.savefig("graficos/boxplot_rfm_escalado.png")
+    plt.show()
+
+
+def graficarClustersRFM2D(rfm_con_cluster, columna_x, columna_y, columna_cluster, nombre_archivo):
+    plt.figure(figsize=(8, 6))
+    
+    clusters_unicos = sorted(rfm_con_cluster[columna_cluster].unique())
+    colores = plt.cm.tab10.colors
+
+    for i, cluster in enumerate(clusters_unicos):
+        subset = rfm_con_cluster[rfm_con_cluster[columna_cluster] == cluster]
+        plt.scatter(
+            subset[columna_x],
+            subset[columna_y],
+            color=colores[i],
+            alpha=0.6,
+            edgecolors='k',
+            linewidths=0.3,
+            label=f'Cluster {cluster}'
+        )
+
+    plt.title(f'Clusters segun {columna_x} y {columna_y}')
+    plt.xlabel(columna_x)
+    plt.ylabel(columna_y)
+    plt.legend(title='Cluster')
+    plt.grid(True, alpha=0.3)
+    plt.savefig(f"graficos/{nombre_archivo}")
+    plt.show()
+
+
+def graficarClustersRFM2DZoom(rfm_con_cluster, columna_x, columna_y, columna_cluster, nombre_archivo, percentil=99):
+    """
+    Genera un scatter plot 2D entre dos variables RFM, coloreado por cluster,
+    con zoom para dejar fuera de la vista los valores mas extremos y poder
+    apreciar mejor la separacion entre los clusters.
+    """
+    plt.figure(figsize=(8, 6))
+    
+    clusters_unicos = sorted(rfm_con_cluster[columna_cluster].unique())
+    colores = plt.cm.tab10.colors
+
+    for i, cluster in enumerate(clusters_unicos):
+        subset = rfm_con_cluster[rfm_con_cluster[columna_cluster] == cluster]
+        plt.scatter(
+            subset[columna_x],
+            subset[columna_y],
+            color=colores[i],
+            alpha=0.6,
+            edgecolors='k',
+            linewidths=0.3,
+            label=f'Cluster {cluster}'
+        )
+
+    limite_x = np.percentile(rfm_con_cluster[columna_x], percentil)
+    limite_y = np.percentile(rfm_con_cluster[columna_y], percentil)
+    plt.xlim(0, limite_x)
+    plt.ylim(0, limite_y)
+
+    plt.title(f'Clusters segun {columna_x} y {columna_y} (zoom)')
+    plt.xlabel(columna_x)
+    plt.ylabel(columna_y)
+    plt.legend(title='Cluster')
+    plt.grid(True, alpha=0.3)
+    plt.savefig(f"graficos/{nombre_archivo}")
     plt.show()
