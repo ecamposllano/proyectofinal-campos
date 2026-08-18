@@ -157,13 +157,13 @@
 	
 	\section{Estado del Arte}
 	
-	\section{Conjuntos de Datos}
+%	\section{Conjuntos de Datos}
 	
 	
 	\chapter{Metodología}
 	\label{Sec:Métodos}
 	
-	\subsection{Dataset}
+	\section{Conjunto dec datos}
 	
 	En el trabajo se utiliza el conjunto de datos \textit{Online Retail II}, publicado en el repositorio UCI Machine Learning Repository. Contiene el registro de transacciones de una tienda minorista con sede en el Reino Unido, especializada en la venta de artículos de regalo para todo tipo de ocasiones, con una base de clientes compuesta principalmente por mayoristas.
 	
@@ -228,7 +228,7 @@
 	Luego de esta limpieza, el dataset pasó de 1.067.371 a 779.425 registros, es decir que se eliminó un 27{,}0\% de los registros originales. La cantidad de clientes únicos casi no cambió, pasando de 5942 a 5878, lo que muestra que la mayoría de los clientes tiene al menos una transacción válida después de la limpieza.
 	
 	
-	\section{Análisis exploratorio: distribución geográfica}
+	\subsection{Análisis exploratorio: distribución geográfica}
 	
 	Como parte del análisis exploratorio inicial, se analizó cómo se distribuían las transacciones según el paísde origen del cliente, con el objetivo de ver si había diferencias de comportamiento entre países que fueran relevantes.
 	
@@ -394,7 +394,7 @@
 	En la Tabla~\ref{tab:estadisticas-rfm-escalado} se puede observar que, aunque el escalamiento logra que las tres variables queden en un rango comparable en su parte central (media 0, desvío 1), los valores máximos de Frecuencia y Monto siguen siendo extremos (27.49 y 49.40 respectivamente). Esto confirma que la asimetría de estas variables no se corrigió del todo con la estandarización, sino que responde a la presencia de un pequeño grupo de clientes con un comportamiento de compra muy por encima del resto. El boxplot de la Figura~\ref{fig:boxplot_rfm_escalado} deja ver esto mismo de forma más clara: mientras que la Recencia queda bastante contenida, la Frecuencia y el Monto tienen varios puntos que se van bien lejos de la caja, sobre todo ese caso en el Monto que llega casi a 50.
 	
 	
-	\section{Clustering}
+	\section{\emph{Clustering}}
 	
 	El objetivo general de este trabajo es comparar el desempeño de $k$-medias y DBSCAN para la segmentación de clientes en un contexto de \emph{e-commerce}, evaluando métricas internas e interpretando las características de cada uno de los segmentos. Además de estos dos algoritmos, se agregó HDBSCAN debido a que este algoritmo resuelve algunas de las limitaciones de DBSCAN, ya que no necesita un valor fijo de \texttt{eps} y se adapta mejor a densidades variables dentro del dataset.
 	
@@ -503,11 +503,13 @@
 		\caption{Grid search de parámetros para HDBSCAN.}
 		\label{tab:gridsearch-hdbscan}
 	\end{table}
+
+\section{Métricas de calidad}
 	
 	\chapter{Resultados y discusión}
 	\label{ch:resultados}
 	
-	\subsection{Resultados de RFM escalado}
+	\section{Resultados de RFM escalado}
 	
 	\begin{figure}[h]
 		\centering
@@ -517,8 +519,10 @@
 	\end{figure}
 	
 	En la Figura~\ref{fig:rfm-3d} se puede apreciar la distribución de los clientes según el modelo RFM escalado. La gran mayoría de los clientes se concentra cerca del origen, con valores bajos de Frecuencia y Monto, mientras que aparecen algunos pocos casos bien alejados del resto en esas dos variables, que son los mismos que ya se habían visto como outliers en el boxplot de la sección anterior. En cuanto a la Recencia, los clientes se reparten de forma más pareja a lo largo de todo el eje, sin ese mismo patrón de concentración. Esta forma de la nube de puntos, una masa grande y compacta de clientes parecidos entre sí, es justamente, como se va a ver más adelante, lo que complica a algoritmos como DBSCAN a la hora de separar bien los grupos. Por eso, como se va a analizar en la siguiente sección, conviene también mirar la distribución de a pares de variables.
+
+
 	
-	\subsection{Resultados de K-means}
+	\section{Resultados de K-means}
 	
 	Se ejecutó K-means con $k=4$ y con $k=5$, tal como se planteó en la metodología. Para cada cluster se calcularon los promedios de Recencia, Frecuencia y Monto, para poder interpretar qué tipo de cliente representa cada grupo.
 	
@@ -654,7 +658,7 @@
 	\end{figure}
 	
 	
-	\subsection{Resultados de DBSCAN}
+	\section{Resultados de DBSCAN}
 	
 	\begin{table}[H]
 		\centering
@@ -709,7 +713,7 @@
 	\end{figure}
 	
 	
-	\subsection{Resultados de HDBSCAN}
+	\section{Resultados de HDBSCAN}
 	\subsubsection{HDBSCAN con $min\_cluster\_size=500, min\_samples=3$}
 	\begin{table}[H]
 		\centering
@@ -853,7 +857,7 @@
 		\label{fig:clusters_recencia_monto_zoom_hdbscan2}
 	\end{figure}
 	
-	\subsection{Evaluación de los modelos}
+	\section{Evaluación de los modelos}
 	
 	\begin{table}[h]
 		\centering
