@@ -16,24 +16,24 @@
 \contentsline {figure}{\numberline {3.8}{\ignorespaces Distribución de clientes según K-Means: k=5.}}{24}{figure.caption.26}%
 \contentsline {figure}{\numberline {3.9}{\ignorespaces Clusters (k=5) según Recencia y Frecuencia.}}{25}{figure.caption.27}%
 \contentsline {figure}{\numberline {3.10}{\ignorespaces Clusters (k=5) según Frecuencia y Monto.}}{26}{figure.caption.28}%
-\contentsline {figure}{\numberline {3.11}{\ignorespaces Clusters (k=5) según Frecuencia y Monto, con zoom.}}{26}{figure.caption.29}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Clusters (k=5) según Frecuencia y Monto, con zoom.}}{27}{figure.caption.29}%
 \contentsline {figure}{\numberline {3.12}{\ignorespaces Clusters (k=5) según Recencia y Monto.}}{27}{figure.caption.30}%
-\contentsline {figure}{\numberline {3.13}{\ignorespaces Clusters (k=5) según Recencia y Monto, con zoom.}}{27}{figure.caption.31}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Clusters (k=5) según Recencia y Monto, con zoom.}}{28}{figure.caption.31}%
 \contentsline {figure}{\numberline {3.14}{\ignorespaces Distribución de clientes según DBSCAN.}}{28}{figure.caption.33}%
-\contentsline {figure}{\numberline {3.15}{\ignorespaces Clusters DBSCAN según Recencia y Frecuencia.}}{28}{figure.caption.34}%
+\contentsline {figure}{\numberline {3.15}{\ignorespaces Clusters DBSCAN según Recencia y Frecuencia.}}{29}{figure.caption.34}%
 \contentsline {figure}{\numberline {3.16}{\ignorespaces Clusters DBSCAN según Frecuencia y Monto.}}{29}{figure.caption.35}%
-\contentsline {figure}{\numberline {3.17}{\ignorespaces Clusters DBSCAN según Recencia y Monto.}}{29}{figure.caption.36}%
+\contentsline {figure}{\numberline {3.17}{\ignorespaces Clusters DBSCAN según Recencia y Monto.}}{30}{figure.caption.36}%
 \contentsline {figure}{\numberline {3.18}{\ignorespaces Distribución de clientes según HDBSCAN - $min\_cluster\_size=500, min\_samples=3$.}}{30}{figure.caption.38}%
-\contentsline {figure}{\numberline {3.19}{\ignorespaces Clusters HDBSCAN según Recencia y Frecuencia.}}{30}{figure.caption.39}%
+\contentsline {figure}{\numberline {3.19}{\ignorespaces Clusters HDBSCAN según Recencia y Frecuencia.}}{31}{figure.caption.39}%
 \contentsline {figure}{\numberline {3.20}{\ignorespaces Clusters HDBSCAN según Frecuencia y Monto.}}{31}{figure.caption.40}%
-\contentsline {figure}{\numberline {3.21}{\ignorespaces Clusters HDBSCAN según Frecuencia y Monto, con zoom.}}{31}{figure.caption.41}%
+\contentsline {figure}{\numberline {3.21}{\ignorespaces Clusters HDBSCAN según Frecuencia y Monto, con zoom.}}{32}{figure.caption.41}%
 \contentsline {figure}{\numberline {3.22}{\ignorespaces Clusters HDBSCAN según Recencia y Monto.}}{32}{figure.caption.42}%
-\contentsline {figure}{\numberline {3.23}{\ignorespaces Clusters HDBSCAN según Recencia y Monto, con zoom.}}{32}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.23}{\ignorespaces Clusters HDBSCAN según Recencia y Monto, con zoom.}}{33}{figure.caption.43}%
 \contentsline {figure}{\numberline {3.24}{\ignorespaces Jerarquía de clusters construida por HDBSCAN}}{33}{figure.caption.44}%
-\contentsline {figure}{\numberline {3.25}{\ignorespaces Distribución de clientes según HDBSCAN - $min\_cluster\_size=200, min\_samples=1$ .}}{33}{figure.caption.46}%
+\contentsline {figure}{\numberline {3.25}{\ignorespaces Distribución de clientes según HDBSCAN - $min\_cluster\_size=200, min\_samples=1$ .}}{34}{figure.caption.46}%
 \contentsline {figure}{\numberline {3.26}{\ignorespaces Clusters HDBSCAN (200/1) según Recencia y Frecuencia.}}{34}{figure.caption.47}%
-\contentsline {figure}{\numberline {3.27}{\ignorespaces Clusters HDBSCAN (200/1) según Frecuencia y Monto.}}{34}{figure.caption.48}%
+\contentsline {figure}{\numberline {3.27}{\ignorespaces Clusters HDBSCAN (200/1) según Frecuencia y Monto.}}{35}{figure.caption.48}%
 \contentsline {figure}{\numberline {3.28}{\ignorespaces Clusters HDBSCAN (200/1) según Frecuencia y Monto, con zoom.}}{35}{figure.caption.49}%
-\contentsline {figure}{\numberline {3.29}{\ignorespaces Clusters HDBSCAN (200/1) según Recencia y Monto.}}{35}{figure.caption.50}%
+\contentsline {figure}{\numberline {3.29}{\ignorespaces Clusters HDBSCAN (200/1) según Recencia y Monto.}}{36}{figure.caption.50}%
 \contentsline {figure}{\numberline {3.30}{\ignorespaces Clusters HDBSCAN (200/1) según Recencia y Monto, con zoom.}}{36}{figure.caption.51}%
 \addvspace {10\p@ }
