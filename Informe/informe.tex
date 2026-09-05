@@ -504,7 +504,54 @@
 		\label{tab:gridsearch-hdbscan}
 	\end{table}
 
-\section{Métricas de calidad}
+	\section{Métricas de calidad}
+	
+	Para evaluar la calidad de los clusters obtenidos con cada algoritmo se utilizaron tres métricas de evaluación interna. A diferencia de un problema de clasificación, en clustering no existe una respuesta correcta conocida de antemano para cada cliente, por lo que estas métricas evalúan directamente la estructura de los clusters (qué tan compactos son y qué tan separados están entre sí) en lugar de comparar contra un resultado esperado.
+	
+	El coeficiente de Silhouette mide qué tan bien separado está cada punto de los demás clusters en relación a su propio cluster. La idea de fondo es simple: un punto está bien agrupado si está cerca de los demás puntos de su cluster y, al mismo tiempo, lejos de los puntos del cluster más cercano. Para cuantificar esto, para cada observación se calculan dos distancias promedio: la distancia promedio a los puntos de su propio cluster, y la distancia promedio a los puntos del cluster vecino más cercano (es decir, el segundo cluster más parecido a esa observación). Después se calcula la diferencia entre ambas distancias, normalizada para quedar en un rango de $-1$ a $1$:
+	
+	\begin{equation}
+		s(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}}
+	\end{equation}
+	
+	donde $a(i)$ es la distancia promedio entre el punto $i$ y el resto de los puntos de su mismo cluster, y $b(i)$ es la distancia promedio entre el punto $i$ y los puntos del cluster vecino más cercano.
+	
+	El valor de $s(i)$ se puede interpretar de la siguiente manera: si $b(i)$ es mucho mayor que $a(i)$, quiere decir que el punto está mucho más cerca de su propio cluster que del cluster vecino, y $s(i)$ se acerca a $1$, lo cual indica una buena asignación. Si $a(i)$ y $b(i)$ son parecidos, $s(i)$ se acerca a $0$, lo que sugiere que el punto está en el límite entre dos clusters. Y si $a(i)$ termina siendo mayor que $b(i)$, es decir que el punto está en realidad más cerca del cluster vecino que del suyo propio, $s(i)$ toma valores negativos, lo que sugiere que probablemente fue asignado al cluster equivocado.
+	
+	El coeficiente de Silhouette global de un modelo se obtiene promediando $s(i)$ sobre todas las observaciones, y sirve como una medida general de qué tan bien definida está la segmentación en su conjunto.
+	
+	El índice de Davies-Bouldin evalúa la relación entre la dispersión dentro de cada cluster y la distancia entre los centros de los distintos clusters. La lógica detrás de esta métrica es que un buen cluster debería ser compacto (los puntos dentro de él no deberían estar muy dispersos) y, al mismo tiempo, debería estar bien alejado de los demás clusters. Para capturar esto, para cada cluster se busca el peor caso posible: el cluster vecino con el cual la relación entre dispersión y distancia sea más desfavorable, es decir, aquel que combine alta dispersión con poca distancia entre centroides:
+	
+	\begin{equation}
+		DB = \frac{1}{k} \sum_{i=1}^{k} \max_{j \neq i} \left( \frac{\sigma_i + \sigma_j}{d(c_i, c_j)} \right)
+	\end{equation}
+	
+	donde $k$ es la cantidad de clusters, $\sigma_i$ es la dispersión promedio dentro del cluster $i$ (qué tan lejos están en promedio los puntos del cluster respecto a su centroide), y $d(c_i, c_j)$ es la distancia entre los centroides de los clusters $i$ y $j$.
+	
+	Para cada cluster $i$, el término $\frac{\sigma_i + \sigma_j}{d(c_i, c_j)}$ se calcula contra todos los demás clusters $j$, y se queda con el valor máximo, es decir, con la peor comparación posible para ese cluster. Esto tiene sentido porque a un cluster le alcanza con estar mal separado de uno solo de sus vecinos para que se considere una segmentación problemática, aunque esté bien separado del resto. Después, el índice de Davies-Bouldin final se obtiene promediando ese peor caso entre todos los clusters.
+	
+	A diferencia del Silhouette, en este caso valores más bajos indican mejor separación, ya que un buen resultado implica clusters compactos (dispersión $\sigma_i$ baja) y bien distanciados entre sí (distancia $d(c_i, c_j)$ alta), lo cual hace que el cociente completo se achique.
+	
+	El índice de Calinski-Harabasz, también conocido como criterio de razón de varianza, compara la dispersión entre clusters con la dispersión dentro de cada cluster. La idea es parecida a la de un análisis de varianza: si los clusters están bien definidos, los puntos deberían variar poco respecto al centro de su propio cluster (dispersión dentro), pero los centros de los distintos clusters deberían estar bastante alejados entre sí (dispersión entre clusters). El índice se calcula como:
+	
+	\begin{equation}
+		CH = \frac{\text{tr}(B_k)}{\text{tr}(W_k)} \times \frac{n - k}{k - 1}
+	\end{equation}
+	
+	donde $n$ es la cantidad total de observaciones, $k$ la cantidad de clusters, $B_k$ la matriz de dispersión entre clusters y $W_k$ la matriz de dispersión dentro de los clusters.
+	
+	La matriz $B_k$ mide qué tan separados están los centroides de cada cluster respecto al centroide general de todos los datos, ponderado por la cantidad de puntos en cada cluster; su traza ($\text{tr}(B_k)$) resume esa dispersión entre clusters en un solo número. La matriz $W_k$, por su parte, mide qué tan dispersos están los puntos dentro de cada cluster respecto a su propio centroide, y su traza ($\text{tr}(W_k)$) resume esa dispersión interna. El cociente $\frac{\text{tr}(B_k)}{\text{tr}(W_k)}$ da entonces una idea directa de qué tan grande es la separación entre clusters en relación a la compactación dentro de cada uno.
+	
+	El factor $\frac{n-k}{k-1}$ es un ajuste que tiene en cuenta la cantidad de observaciones y de clusters, y sirve para que el índice no favorezca automáticamente a soluciones con más o menos clusters solo por la forma en que se calculan $B_k$ y $W_k$, permitiendo comparar configuraciones con distinta cantidad de clusters de forma más justa.
+	
+	Acá valores más altos son mejores, porque reflejan una situación en la que la dispersión entre clusters es grande en relación a la dispersión dentro de cada cluster, es decir, clusters densos y bien diferenciados entre sí.
+	
+	Es importante aclarar que estas tres métricas se calcularon únicamente sobre el modelo final de cada algoritmo, y no se usaron durante la búsqueda de hiperparámetros de DBSCAN y HDBSCAN. Esto se debe a que tanto DBSCAN como HDBSCAN pueden dejar puntos sin asignar a ningún cluster, marcándolos como ruido (cluster $-1$), y las tres métricas mencionadas no fueron diseñadas para manejar este tipo de puntos.
+	
+	En el caso del Silhouette y del índice de Calinski-Harabasz, el cálculo requiere comparar cada punto contra un cluster de referencia; si los puntos de ruido se incluyen como si fueran un cluster más, se termina midiendo la separación de un grupo que en realidad no representa ningún patrón real, sino simplemente todo lo que el algoritmo no pudo agrupar. Esto puede distorsionar el resultado tanto para bien como para mal, dependiendo de cuántos puntos caigan en esa categoría y qué tan dispersos estén. El índice de Davies-Bouldin presenta un problema similar, ya que también depende de calcular centroides y dispersiones por cluster, algo que no tiene mucho sentido para un conjunto de puntos que fueron agrupados justamente por no pertenecer a ningún cluster.
+	
+	Por este motivo, usar estas métricas durante la etapa de búsqueda de hiperparámetros hubiera sido poco confiable, ya que un modelo con mucho ruido podría obtener un buen puntaje simplemente porque el ruido no está siendo evaluado correctamente, y no porque los clusters formados sean realmente buenos. Por eso se optó por evaluar los hiperparámetros de DBSCAN y HDBSCAN en base a criterios más interpretables, como la cantidad de clusters obtenidos y el porcentaje de puntos clasificados como ruido, y reservar las métricas de Silhouette, Davies-Bouldin y Calinski-Harabasz para la comparación final entre los cuatro modelos.
+
 	
 	\chapter{Resultados y discusión}
 	\label{ch:resultados}
@@ -735,7 +782,7 @@
 	
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.8\textwidth]{../graficos/rfm_3d_dbscan.png}
+		\includegraphics[width=0.8\textwidth]{../graficos/rfm_3d_hdbscan.png}
 		\caption{Distribución de clientes según HDBSCAN - $min\_cluster\_size=500, min\_samples=3$.}
 		\label{fig:hdbscan-3d}
 	\end{figure}
@@ -814,7 +861,7 @@
 	
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.8\textwidth]{../graficos/rfm_3d_dbscan.png}
+		\includegraphics[width=0.8\textwidth]{../graficos/rfm_3d_hdbscan2.png}
 		\caption{Distribución de clientes según HDBSCAN - $min\_cluster\_size=200, min\_samples=1$ .}
 		\label{fig:hdbscan-3d2}
 	\end{figure}
