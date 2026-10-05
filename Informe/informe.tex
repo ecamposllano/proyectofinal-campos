@@ -155,6 +155,9 @@
 	
 	\section{Motivación}
 	
+	En la actualidad, las plataformas de comercio electrónico (e-commerce) generan un volumen masivo y constante de datos sobre las transacciones de sus usuarios. Sin embargo, disponer de una gran cantidad de datos no implica necesariamente contar con información útil. El principal desafío reside en transformar esos registros transaccionales en conocimiento práctico que sirva para orientar la toma de decisiones estratégicas. En un mercado competitivo, comprender cómo se comportan los clientes, con qué frecuencia compran y cuánto gastan resulta fundamental para diseñar estrategias de retención, optimizar recursos de marketing y mejorar el valor a largo plazo de la base de clientes. Para abordar este análisis, es habitual recurrir a la segmentación mediante el modelo RFM (Recencia, Frecuencia y Monto) en combinación con algoritmos de aprendizaje no supervisado (clustering). Esta metodología permite agrupar a los clientes de forma automática según la similitud de sus patrones de compra. Sin embargo, la aplicación de estos algoritmos en conjuntos de datos reales de e-commerce presenta complejidades particulares. Las métricas suelen mostrar una marcada asimetría, con una gran concentración de clientes de bajo consumo y un grupo reducido de compradores mayoristas o atípicos (outliers) que registran valores extremadamente altos. Teniendo esto en cuenta, los algoritmos tradicionales como K-means, aunque muy extendidos por su sencillez y rapidez, pueden verse afectados por la presencia de estos valores extremos o por la asunción de que los grupos tienen formas geométricas regulares. Por su parte, las alternativas basadas en densidad, como DBSCAN e HDBSCAN, proponen en teoría una mayor flexibilidad para identificar agrupaciones de formas complejas y aislar observaciones atípicas sin forzarlas a pertenecer a un clúster.
+	La motivación de este trabajo surge de la necesidad de evaluar en la práctica el desempeño de estos tres enfoques sobre un conjunto de datos real (Online Retail II). El objetivo es determinar en qué medida las métricas cuantitativas de calidad matemática coinciden con la utilidad real de cada segmentación para el negocio, identificando qué algoritmo logra el equilibrio más conveniente entre precisión técnica e interpretabilidad comercial.
+	
 	\section{Estado del Arte}
 	
 %	\section{Conjuntos de Datos}
@@ -927,6 +930,31 @@
 	Davies-Bouldin y Calinski-Harabasz. K-means con k=5 es el que mejor puntúa en las tres, seguido por K-means con k=4. DBSCAN queda muy por detrás en todos los casos, lo cual confirma la limitación que ya se había visto en los gráficos: al concentrar casi todos los clientes en un único cluster, no logra una segmentación real. Un resultado que vale la pena remarcar es que, entre las dos configuraciones de HDBSCAN, la que mejor puntúa en las métricas es la primera (\textit{min\_cluster\_size}=500, \textit{min\_samples}=3), a pesar de que se había probado también la segunda configuración (\textit{min\_cluster\_size}=200, \textit{min\_samples}=1) por dar una segmentación con más sentido para el negocio. Esto tiene que ver con que estas métricas premian clusters compactos y bien separados entre sí. La configuración de 9 clusters, en cambio, encuentra matices más finos entre los clientes, como la distinción entre compradores únicos recientes y perdidos, que valen la pena desde el punto de vista del negocio, aunque las métricas internas no lo reflejen tan bien. En conjunto, K-means con k=5 se queda como el modelo con mejor desempeño según estas métricas, lo cual coincide con que fue el más fácil de interpretar y el que dio una segmentación más pareja a lo largo de todo el análisis.
 	
 	\chapter{Conclusiones}
+	
+	En este trabajo se analizó y comparó el desempeño de los algoritmos de clustering K-means, DBSCAN e HDBSCAN combinados con el modelo RFM (Recencia, Frecuencia, Monto) para la segmentación de clientes de un comercio minorista en línea (Online Retail II).
+	
+	A lo largo del desarrollo se observaron diferencias significativas en la forma en que cada método procesa la información y estructura los grupos, arribando a las siguientes conclusiones principales:
+	\begin{itemize}
+		\item \textbf{Desempeño de K-means en métricas de evaluación interna:}
+		El algoritmo K-means con $k=5$ presentó los mejores indicadores cuantitativos entre los modelos evaluados, alcanzando un coeficiente de Silhouette de 0,6000, un índice de Davies-Bouldin de 0,5653 y un valor de Calinski-Harabasz de 4581,65. Estas métricas reflejan que K-means logró construir grupos bien delimitados y internamente compactos, delimitando de manera limpia a los clientes inactivos, los compradores habituales y las distintas categorías de mayor gasto.
+		
+		\item\textbf{Dificultades de DBSCAN ante datos con densidad variable:}
+		La configuración probada de DBSCAN ($\epsilon=0.2$, \texttt{min\_puntos}=5) mostró limitaciones para generar una segmentación equilibrada. El algoritmo concentró al 96,3\% de la base de usuarios en un solo clúster general y marcó como ruido a casi la totalidad de los clientes con mayor frecuencia y gasto. Este resultado confirma en la práctica la dificultad de DBSCAN para responder a conjuntos de datos donde la densidad varía fuertemente entre la masa principal de usuarios y los compradores de mayor valor. 
+		
+		\item \textbf{Relación entre métricas matemáticas y utilidad comercial en HDBSCAN:}
+		Aunque HDBSCAN registró puntajes más bajos en los índices de evaluación sintéticos —debido a la forma en que estas métricas penalizan la presencia de puntos de ruido o fronteras irregulares—, la variante con \texttt{min\_cluster\_size=200} y \texttt{min\_samples=1}1 aportó una perspectiva muy útil desde el punto de vista del análisis de negocio. Esta configuración permitió descomponer la base en 9 gradientes que reflejan con detalle las etapas intermedias entre un cliente activo y uno perdido, diferenciando, por ejemplo, a los compradores ocasionales recientes de aquellos que no registran actividad desde hace tiempo.
+		
+		\item \textbf{Gestión de valores extremos y clientes corporativos:}
+		Un aspecto relevante del enfoque por densidad en HDBSCAN fue su tratamiento de las observaciones atípicas. Mientras que en K-means la presencia de un cliente con un volumen de compra excepcional (\$580.987,04) genera un clúster de un único integrante y condiciona la escala del resto, HDBSCAN clasifica a estos usuarios con perfiles de compra extremos dentro de la categoría de ruido junto a otros clientes de facturación elevada (con un promedio cercano a los \$8.700). De este modo, se evita distorsionar la agrupación de los clientes de consumo regular.
+
+	\end{itemize}
+	
+	A partir de los resultados obtenidos, se concluye que no existe un único algoritmo superior en todos los aspectos, sino que sus aportes resultan complementarios:
+	\begin{itemize}
+		\item Para la gestión operativa y la automatización de campañas de marketing general, K-means ($k=5$) se presenta como la opción más adecuada por su simplicidad, rápido cómputo y consistencia en los indicadores de separación.
+		
+		\item Por su parte, HDBSCAN constituye una herramienta analítica valiosa para explorar la estructura profunda de los datos, aislar automáticamente cuentas corporativas o mayoristas y diseñar estrategias específicas de recontacto orientadas a subgrupos con hábitos de compra particulares.
+	\end{itemize}
 	
 	
 	\bibliographystyle{plain}
