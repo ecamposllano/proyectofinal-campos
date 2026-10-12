@@ -26,19 +26,37 @@ def main():
     # LIMPIEZA DEL DATASET
     df_limpio = limpiarDatos(df)
     resumenLimpieza(df, df_limpio)
-    """
+    
     # DISTRIBUCION DE PAISES EN EL DATASET
     resumenPaises = analisisPaises(df_limpio)
+    traduccion_paises = {
+        'United Kingdom': 'Reino Unido', 'France': 'Francia', 'USA': 'Estados Unidos',
+        'Belgium': 'Bélgica', 'Australia': 'Australia', 'EIRE': 'Irlanda',
+        'Germany': 'Alemania', 'Portugal': 'Portugal', 'Japan': 'Japón',
+        'Denmark': 'Dinamarca', 'Nigeria': 'Nigeria', 'Netherlands': 'Países Bajos',
+        'Poland': 'Polonia', 'Spain': 'España', 'Channel Islands': 'Islas del Canal',
+        'Italy': 'Italia', 'Cyprus': 'Chipre', 'Greece': 'Grecia', 'Norway': 'Noruega',
+        'Austria': 'Austria', 'Sweden': 'Suecia', 'United Arab Emirates': 'Emiratos Árabes Unidos',
+        'Finland': 'Finlandia', 'Switzerland': 'Suiza', 'Unspecified': 'No especificado',
+        'Malta': 'Malta', 'Bahrain': 'Baréin', 'RSA': 'Sudáfrica', 'Bermuda': 'Bermudas',
+        'Hong Kong': 'Hong Kong', 'Singapore': 'Singapur', 'Thailand': 'Tailandia',
+        'Israel': 'Israel', 'Lithuania': 'Lituania', 'West Indies': 'Indias Occidentales',
+        'Lebanon': 'Líbano', 'Korea': 'Corea del Sur', 'Brazil': 'Brasil', 'Canada': 'Canadá',
+        'Iceland': 'Islandia', 'Saudi Arabia': 'Arabia Saudita',
+        'Czech Republic': 'República Checa', 'European Community': 'Comunidad Europea',
+    }
+    resumenPaises = resumenPaises.rename(index=traduccion_paises)
     graficarBarrasPaises(resumenPaises)
     graficarBarrasPaisesSinUK(resumenPaises)
 
-
+    """
     # COMPARACION DE PAISES
     compararPaises(df_limpio, "United Kingdom", "Lithuania")
     compararPaises(df_limpio, "France", "Germany")
     compararPaises(df_limpio, "United Arab Emirates", "Portugal")
     compararPaises(df_limpio, "Netherlands", "Germany")
     compararPaises(df_limpio, "Japan", "Switzerland")
+    
     """
     df_uk = df_limpio.copy()
     df_uk["Country"] = np.where(df_uk["Country"] == "United Kingdom", "United Kingdom", "Resto del mundo")
@@ -54,14 +72,15 @@ def main():
     rfm_escalado, scaler = escalarDatos(rfm)
     resumenEscalamiento(rfm_escalado)
     graficarBoxplotRFMEscalado(rfm_escalado)
+    graficarRFM3D(rfm, etiquetas=None, nombre_archivo="rfm_3d.png")
 
-
+    
     # CLUSTERING - KMEANS
     resultados_k = buscarKOptimo(rfm_escalado)
-    #graficarCodo(resultados_k)
+    graficarCodo(resultados_k)
     
     rfm_kmeans4, modelo_kmeans4 = aplicarKMeans(rfm, rfm_escalado, k=4)
-    """
+    
     resumenKMeans(rfm_kmeans4)
     graficarRFM3D(rfm_kmeans4, rfm_kmeans4["Cluster_KMeans"], "Clusters K-means (k=4)", "rfm_3d_kmeans_k4.png")
     graficarClustersRFM2D(rfm_kmeans4, 'Recencia', 'Frecuencia', 'Cluster_KMeans', 'clusters_recencia_frecuencia_k4.png')
@@ -69,9 +88,9 @@ def main():
     graficarClustersRFM2D(rfm_kmeans4, 'Frecuencia', 'Monto', 'Cluster_KMeans', 'clusters_frecuencia_monto_k4.png')
     graficarClustersRFM2DZoom(rfm_kmeans4, 'Frecuencia', 'Monto', 'Cluster_KMeans', 'clusters_frecuencia_monto_zoom.png')
     graficarClustersRFM2DZoom(rfm_kmeans4, 'Recencia', 'Monto', 'Cluster_KMeans', 'clusters_recencia_monto_zoom.png')
-    """
+
     rfm_kmeans5, modelo_kmeans5 = aplicarKMeans(rfm, rfm_escalado, k=5)
-    """
+
     resumenKMeans(rfm_kmeans5)
     graficarRFM3D(rfm_kmeans5, rfm_kmeans5["Cluster_KMeans"], "Clusters K-means (k=5)", "rfm_3d_kmeans_k5.png")
     graficarClustersRFM2D(rfm_kmeans5, 'Recencia', 'Frecuencia', 'Cluster_KMeans', 'clusters_recencia_frecuencia_k5.png')
@@ -79,7 +98,7 @@ def main():
     graficarClustersRFM2D(rfm_kmeans5, 'Frecuencia', 'Monto', 'Cluster_KMeans', 'clusters_frecuencia_monto_k5.png')
     graficarClustersRFM2DZoom(rfm_kmeans5, 'Frecuencia', 'Monto', 'Cluster_KMeans', 'clusters_frecuencia_monto_zoom_k5.png')
     graficarClustersRFM2DZoom(rfm_kmeans5, 'Recencia', 'Monto', 'Cluster_KMeans', 'clusters_recencia_monto_zoom_k5.png')
-    """
+
     # CLUSTERING - DBSCAN
     resultados_dbscan = buscarParametrosDBSCAN(
         rfm_escalado,
@@ -96,13 +115,13 @@ def main():
         frecuencia_promedio=("Frecuencia", "mean"),
         monto_promedio=("Monto", "mean")
     ).reset_index()
-    """
+
     print(resumen_dbscan)
     graficarRFM3D(rfm_dbscan, rfm_dbscan["Cluster_DBSCAN"], "Clusters DBSCAN", "rfm_3d_dbscan.png")
     graficarClustersRFM2D(rfm_dbscan, 'Recencia', 'Frecuencia', "Cluster_DBSCAN", 'clusters_recencia_frecuencia_dbscan.png')
     graficarClustersRFM2D(rfm_dbscan, 'Recencia', 'Monto', "Cluster_DBSCAN", 'clusters_recencia_monto_dbscan.png')
     graficarClustersRFM2D(rfm_dbscan, 'Frecuencia', 'Monto', "Cluster_DBSCAN", 'clusters_frecuencia_monto_dbscan.png')
-    """
+
     # CLUSTERING - HDBSCAN
     resultados_hdbscan = buscarParametrosHDBSCAN(
         rfm_escalado,
@@ -112,7 +131,7 @@ def main():
     print(resultados_hdbscan)
 
     rfm_hdbscan, modelo_hdbscan = aplicarHDBSCAN(rfm, rfm_escalado, min_cluster_size=500, min_puntos=3)
-    """
+
     graficarRFM3D(rfm_hdbscan, rfm_hdbscan["Cluster_HDBSCAN"], "Clusters HDBSCAN", "rfm_3d_hdbscan.png")
     graficarClustersRFM2D(rfm_hdbscan, 'Recencia', 'Frecuencia', "Cluster_HDBSCAN", 'clusters_recencia_frecuencia_hdbscan.png')
     graficarClustersRFM2D(rfm_hdbscan, 'Recencia', 'Monto', "Cluster_HDBSCAN", 'clusters_recencia_monto_hdbscan.png')
@@ -121,7 +140,7 @@ def main():
     graficarClustersRFM2DZoom(rfm_hdbscan, 'Recencia', 'Monto', 'Cluster_HDBSCAN', 'clusters_recencia_monto_zoom_hdbscan.png')
     
     graficarJerarquiaClusters(modelo_hdbscan)
-    """
+
     resumen_hdbscan = rfm_hdbscan.groupby("Cluster_HDBSCAN").agg(
         cantidad_clientes=("Customer ID", "count"),
         recencia_promedio=("Recencia", "mean"),
@@ -132,7 +151,7 @@ def main():
     print(resumen_hdbscan)
 
     rfm_hdbscan2, modelo_hdbscan2 = aplicarHDBSCAN(rfm, rfm_escalado, min_cluster_size=200, min_puntos=1)
-    """
+
     graficarRFM3D(rfm_hdbscan2, rfm_hdbscan2["Cluster_HDBSCAN"], "Clusters HDBSCAN", "rfm_3d_hdbscan2.png")
     graficarClustersRFM2D(rfm_hdbscan2, 'Recencia', 'Frecuencia', "Cluster_HDBSCAN", 'clusters_recencia_frecuencia_hdbscan2.png')
     graficarClustersRFM2D(rfm_hdbscan2, 'Recencia', 'Monto', "Cluster_HDBSCAN", 'clusters_recencia_monto_hdbscan2.png')
@@ -141,7 +160,7 @@ def main():
     graficarClustersRFM2DZoom(rfm_hdbscan2, 'Recencia', 'Monto', 'Cluster_HDBSCAN', 'clusters_recencia_monto_zoom_hdbscan2.png')
         
     graficarJerarquiaClusters(modelo_hdbscan2)
-    """
+
     resumen_hdbscan2 = rfm_hdbscan2.groupby("Cluster_HDBSCAN").agg(
         cantidad_clientes=("Customer ID", "count"),
         recencia_promedio=("Recencia", "mean"),
@@ -162,6 +181,8 @@ def main():
 
     df_evaluacion = pd.DataFrame(resultados_evaluacion)
     print(df_evaluacion)
+
+    
 
 
 if __name__ == "__main__":
