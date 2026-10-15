@@ -4,36 +4,37 @@
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Top 15 países por cantidad de transacciones.}}{10}{figure.caption.7}%
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Top 15 países por cantidad de transacciones (excluyendo Reino Unido).}}{12}{figure.caption.8}%
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Distribución de las variables RFM escaladas.}}{14}{figure.caption.13}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Método del codo para la selección de $k$.}}{15}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Distribución de las variables RFM escaladas, con zoom en el eje vertical.}}{15}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Método del codo para la selección de $k$.}}{16}{figure.caption.15}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Distribución de clientes según RFM.}}{20}{figure.caption.17}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Distribución de clientes según K-Means: k=4.}}{22}{figure.caption.19}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Visualización de los \emph {clusters} ($k=4$) en el plano Recencia-Frecuencia.}}{23}{figure.caption.20}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Visualización de los \emph {clusters} ($k=4$) en el plano Frecuencia-Monto.}}{24}{figure.caption.21}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=4$) en el plano Frecuencia-Monto.}}{25}{figure.caption.22}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Visualización de los \emph {clusters} ($k=4$) en el plano Recencia-Monto.}}{26}{figure.caption.23}%
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=4$) en el plano Recencia-Monto.}}{27}{figure.caption.24}%
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Distribución de clientes según \emph {K-Means}: $k=5$.}}{28}{figure.caption.26}%
-\contentsline {figure}{\numberline {3.9}{\ignorespaces Visualización de los \emph {clusters} ($k=5$) en el plano Recencia-Frecuencia.}}{29}{figure.caption.27}%
-\contentsline {figure}{\numberline {3.10}{\ignorespaces Visualización de los \emph {clusters} ($k=5$) en el plano Frecuencia-Monto.}}{30}{figure.caption.28}%
-\contentsline {figure}{\numberline {3.11}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=5$) en el plano Frecuencia-Monto.}}{30}{figure.caption.29}%
-\contentsline {figure}{\numberline {3.12}{\ignorespaces Visualización de los \emph {clusters} ($k=5$) en el plano Recencia-Monto.}}{31}{figure.caption.30}%
-\contentsline {figure}{\numberline {3.13}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=5$) en el plano Recencia-Monto.}}{31}{figure.caption.31}%
-\contentsline {figure}{\numberline {3.14}{\ignorespaces Distribución de clientes según DBSCAN.}}{32}{figure.caption.33}%
-\contentsline {figure}{\numberline {3.15}{\ignorespaces Visualización de los \emph {clusters} DBSCAN en el plano Recencia-Frecuencia.}}{32}{figure.caption.34}%
-\contentsline {figure}{\numberline {3.16}{\ignorespaces Visualización de los \emph {clusters} DBSCAN en el plano Frecuencia-Monto.}}{33}{figure.caption.35}%
-\contentsline {figure}{\numberline {3.17}{\ignorespaces Visualización de los \emph {clusters} DBSCAN en el plano Recencia-Monto.}}{33}{figure.caption.36}%
-\contentsline {figure}{\numberline {3.18}{\ignorespaces Distribución de clientes según HDBSCAN - \texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3.}}{34}{figure.caption.38}%
-\contentsline {figure}{\numberline {3.19}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Recencia-Frecuencia.}}{34}{figure.caption.39}%
-\contentsline {figure}{\numberline {3.20}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Frecuencia-Monto.}}{35}{figure.caption.40}%
-\contentsline {figure}{\numberline {3.21}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Frecuencia-Monto.}}{35}{figure.caption.41}%
-\contentsline {figure}{\numberline {3.22}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plaon Recencia-Monto.}}{36}{figure.caption.42}%
-\contentsline {figure}{\numberline {3.23}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Recencia-Monto.}}{36}{figure.caption.43}%
-\contentsline {figure}{\numberline {3.24}{\ignorespaces Jerarquía de \emph {clusters} construida por HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3).}}{37}{figure.caption.44}%
-\contentsline {figure}{\numberline {3.25}{\ignorespaces Distribución de clientes según HDBSCAN - \texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1 .}}{38}{figure.caption.46}%
-\contentsline {figure}{\numberline {3.26}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Recencia-Frecuencia.}}{38}{figure.caption.47}%
-\contentsline {figure}{\numberline {3.27}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Frecuencia-Monto.}}{39}{figure.caption.48}%
-\contentsline {figure}{\numberline {3.28}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Frecuencia-Monto.}}{39}{figure.caption.49}%
-\contentsline {figure}{\numberline {3.29}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Recencia-Monto.}}{40}{figure.caption.50}%
-\contentsline {figure}{\numberline {3.30}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Recencia-Monto.}}{40}{figure.caption.51}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Distribución de clientes según RFM.}}{21}{figure.caption.18}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Distribución de clientes según K-Means: k=4.}}{23}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Visualización de los \emph {clusters} ($k=4$) en el plano Recencia-Frecuencia.}}{24}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Visualización de los \emph {clusters} ($k=4$) en el plano Frecuencia-Monto.}}{25}{figure.caption.22}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=4$) en el plano Frecuencia-Monto.}}{26}{figure.caption.23}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Visualización de los \emph {clusters} ($k=4$) en el plano Recencia-Monto.}}{27}{figure.caption.24}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=4$) en el plano Recencia-Monto.}}{28}{figure.caption.25}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Distribución de clientes según \emph {K-Means}: $k=5$.}}{29}{figure.caption.27}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Visualización de los \emph {clusters} ($k=5$) en el plano Recencia-Frecuencia.}}{30}{figure.caption.28}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Visualización de los \emph {clusters} ($k=5$) en el plano Frecuencia-Monto.}}{31}{figure.caption.29}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=5$) en el plano Frecuencia-Monto.}}{31}{figure.caption.30}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Visualización de los \emph {clusters} ($k=5$) en el plano Recencia-Monto.}}{32}{figure.caption.31}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Visualización con zoom de los \emph {clusters} ($k=5$) en el plano Recencia-Monto.}}{32}{figure.caption.32}%
+\contentsline {figure}{\numberline {3.14}{\ignorespaces Distribución de clientes según DBSCAN.}}{33}{figure.caption.34}%
+\contentsline {figure}{\numberline {3.15}{\ignorespaces Visualización de los \emph {clusters} DBSCAN en el plano Recencia-Frecuencia.}}{33}{figure.caption.35}%
+\contentsline {figure}{\numberline {3.16}{\ignorespaces Visualización de los \emph {clusters} DBSCAN en el plano Frecuencia-Monto.}}{34}{figure.caption.36}%
+\contentsline {figure}{\numberline {3.17}{\ignorespaces Visualización de los \emph {clusters} DBSCAN en el plano Recencia-Monto.}}{34}{figure.caption.37}%
+\contentsline {figure}{\numberline {3.18}{\ignorespaces Distribución de clientes según HDBSCAN - \texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3.}}{35}{figure.caption.39}%
+\contentsline {figure}{\numberline {3.19}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Recencia-Frecuencia.}}{35}{figure.caption.40}%
+\contentsline {figure}{\numberline {3.20}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Frecuencia-Monto.}}{36}{figure.caption.41}%
+\contentsline {figure}{\numberline {3.21}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Frecuencia-Monto.}}{36}{figure.caption.42}%
+\contentsline {figure}{\numberline {3.22}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plaon Recencia-Monto.}}{37}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.23}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3) en el plano Recencia-Monto.}}{37}{figure.caption.44}%
+\contentsline {figure}{\numberline {3.24}{\ignorespaces Jerarquía de \emph {clusters} construida por HDBSCAN (\texttt {min\_cluster\_size}=500, \texttt {min\_samples}=3).}}{38}{figure.caption.45}%
+\contentsline {figure}{\numberline {3.25}{\ignorespaces Distribución de clientes según HDBSCAN - \texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1 .}}{39}{figure.caption.47}%
+\contentsline {figure}{\numberline {3.26}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Recencia-Frecuencia.}}{39}{figure.caption.48}%
+\contentsline {figure}{\numberline {3.27}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Frecuencia-Monto.}}{40}{figure.caption.49}%
+\contentsline {figure}{\numberline {3.28}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Frecuencia-Monto.}}{40}{figure.caption.50}%
+\contentsline {figure}{\numberline {3.29}{\ignorespaces Visualización de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Recencia-Monto.}}{41}{figure.caption.51}%
+\contentsline {figure}{\numberline {3.30}{\ignorespaces Visualización con zoom de los \emph {clusters} HDBSCAN (\texttt {min\_cluster\_size}=200, \texttt {min\_samples}=1) en el plano Recencia-Monto.}}{41}{figure.caption.52}%
 \addvspace {10\p@ }

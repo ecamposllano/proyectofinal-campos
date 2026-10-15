@@ -393,7 +393,14 @@
 		\label{fig:boxplot_rfm_escalado}
 	\end{figure}
 	
-	En la Tabla~\ref{tab:estadisticas-rfm-escalado} se puede observar que, aunque el escalamiento logra que las tres variables queden en un rango comparable en su parte central (media 0, desvío 1), los valores máximos de Frecuencia y Monto siguen siendo extremos (27{,}49 y 49{,}40 respectivamente). Esto es esperable, porque la estandarización solo cambia la escala y no la forma de la distribución: la asimetría de estas variables es propia de los datos y responde a un pequeño grupo de clientes con un comportamiento de compra muy por encima del resto. En el \emph{boxplot} de la Figura~\ref{fig:boxplot_rfm_escalado} se ve lo mismo: la Recencia no presenta outliers, mientras que la Frecuencia y el Monto tienen muchos puntos que se alejan de la caja, sobre todo ese caso en el Monto que llega casi a 50.
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../graficos/boxplot_rfm_escalado_zoom.png}
+		\caption{Distribución de las variables RFM escaladas, con zoom en el eje vertical.}
+		\label{fig:boxplot_rfm_escalado_zoom}
+	\end{figure}
+	
+	En la Tabla~\ref{tab:estadisticas-rfm-escalado} se puede observar que, aunque el escalamiento logra que las tres variables queden en un rango comparable en su parte central (media 0, desvío 1), los valores máximos de Frecuencia y Monto siguen siendo extremos (27{,}49 y 49{,}40 respectivamente). Esto es esperable, porque la estandarización solo cambia la escala y no la forma de la distribución: la asimetría de estas variables es propia de los datos y responde a un pequeño grupo de clientes con un comportamiento de compra muy por encima del resto. En el \emph{boxplot} de la Figura~\ref{fig:boxplot_rfm_escalado} se ve lo mismo: la Recencia no presenta \emph{outliers}, mientras que la Frecuencia y el Monto tienen muchos puntos que se alejan de la caja, sobre todo ese caso en el Monto que llega casi a 50. Como esos valores extremos aplastan las cajas contra el cero, la Figura~\ref{fig:boxplot_rfm_escalado_zoom} muestra el mismo \emph{boxplot} con el eje vertical limitado a valores entre $-1$ y $10$, para poder ver mejor las cajas de Frecuencia y Monto. Esta versión deja fuera de la vista a los \emph{outliers} más alejados, que igual se tienen en cuenta en el análisis.
 	
 	
 	\section{\emph{Clustering}}
