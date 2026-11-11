@@ -99,7 +99,7 @@ def graficarRFM3D(rfm, etiquetas=None, titulo="Distribución de clientes según 
         fig.legend(
             handles, labels, title="Cluster", loc="lower center",
             ncol=min(n, 5), markerscale=3, frameon=True)
-        fig.subplots_adjust(bottom=0.2)
+        fig.subplots_adjust(left=0.05, right=0.9, bottom=0.2)
 
     ax.set_xlabel("Recencia (días)", labelpad=10)
     ax.set_ylabel("Frecuencia", labelpad=10)

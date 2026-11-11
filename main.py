@@ -73,7 +73,7 @@ def main():
     resumenEscalamiento(rfm_escalado)
     graficarBoxplotRFMEscalado(rfm_escalado)
     graficarRFM3D(rfm, etiquetas=None, nombre_archivo="rfm_3d.png")
-"""
+
     
     # CLUSTERING - KMEANS
     resultados_k = buscarKOptimo(rfm_escalado)
@@ -83,6 +83,7 @@ def main():
     
     resumenKMeans(rfm_kmeans4)
     graficarRFM3D(rfm_kmeans4, rfm_kmeans4["Cluster_KMeans"], "Clusters K-means (k=4)", "rfm_3d_kmeans_k4.png")
+"""
     graficarClustersRFM2D(rfm_kmeans4, 'Recencia', 'Frecuencia', 'Cluster_KMeans', 'clusters_recencia_frecuencia_k4.png')
     graficarClustersRFM2D(rfm_kmeans4, 'Recencia', 'Monto', 'Cluster_KMeans', 'clusters_recencia_monto_k4.png')
     graficarClustersRFM2D(rfm_kmeans4, 'Frecuencia', 'Monto', 'Cluster_KMeans', 'clusters_frecuencia_monto_k4.png')
