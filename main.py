@@ -73,7 +73,7 @@ def main():
     resumenEscalamiento(rfm_escalado)
     graficarBoxplotRFMEscalado(rfm_escalado)
     graficarRFM3D(rfm, etiquetas=None, nombre_archivo="rfm_3d.png")
-
+"""
     
     # CLUSTERING - KMEANS
     resultados_k = buscarKOptimo(rfm_escalado)
@@ -181,6 +181,7 @@ def main():
 
     df_evaluacion = pd.DataFrame(resultados_evaluacion)
     print(df_evaluacion)
+"""
 
     
 

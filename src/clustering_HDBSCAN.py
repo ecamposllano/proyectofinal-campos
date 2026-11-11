@@ -1,5 +1,5 @@
 import pandas as pd
-import hdbscan
+from sklearn.cluster import HDBSCAN
 
 
 def buscarParametrosHDBSCAN(rfm_escalado, min_cluster_size_valores, min_puntos_valores):
@@ -7,7 +7,7 @@ def buscarParametrosHDBSCAN(rfm_escalado, min_cluster_size_valores, min_puntos_v
 
     for min_cluster_size in min_cluster_size_valores:
         for min_puntos in min_puntos_valores:
-            clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_puntos)
+            clusterer = HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_puntos)
             etiquetas = clusterer.fit_predict(rfm_escalado)
 
             valores_unicos = set(etiquetas)
@@ -32,7 +32,7 @@ def buscarParametrosHDBSCAN(rfm_escalado, min_cluster_size_valores, min_puntos_v
 
 
 def aplicarHDBSCAN(rfm, rfm_escalado, min_cluster_size, min_puntos):
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_puntos, gen_min_span_tree=True)
+    clusterer = HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_puntos, gen_min_span_tree=True)
     etiquetas = clusterer.fit_predict(rfm_escalado)
 
     rfm_con_cluster = rfm.copy()

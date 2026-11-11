@@ -99,7 +99,7 @@
 \definecolor{FNcolor}{HTML}{E06666} % Rojo claro para FN
 
 \title{Segmentación de Clientes con Algoritmos de Aprendizaje Automático no Supervisado}
-\author{Autor: Ernestina Campos Llano \\ Tutora: Dra. Andrea Rey}
+\author{Autora: Ernestina Campos Llano \\ Tutora: Dra. Andrea Rey}
 \date{Universidad Nacional de Hurlingham (UNAHUR)}
 \titlepic{\vspace{12cm}\includegraphics[width=0.15\textwidth]{logo.jpg}}
 
@@ -145,9 +145,10 @@
 	
 	\chapter*{Resumen}
 	
-	\noindent
+	En este trabajo se implementaron los algoritmos K-\emph{means}, DBSCAN y HDBSCAN sobre un conjunto de datos obtenido del \emph{UCI Machine Learning Repository}, que corresponde a las transacciones de una tienda online del Reino Unido (\emph{Online Retail II}), con el objetivo de evaluar su desempeño en la segmentación de clientes. Estos algoritmos son de aprendizaje automático no supervisado, es decir, trabajan con datos que no están etiquetados, sin una ``respuesta correcta'', y su objetivo es encontrar patrones, agrupaciones o \emph{clusters} a partir de las características de los datos. Para esto, primero se limpió el conjunto de datos y se calcularon tres características de cada cliente, que surgen del modelo RFM: Recencia, Frecuencia y Monto.
 	
-	
+	Luego se describió cada algoritmo y se buscaron los hiperparámetros más adecuados para cada uno. A continuación, se presentan y discutrn los resultados obtenidos, comparando los desempeños mediante las métricas seleccionadas. K-\emph{means} con $k=5$ fue el método con mejor desempeño según las métricas, ya que obtuvo los mejores valores de Silhouette y Calinski-Harabasz, y asigna a todos los clientes a un grupo. DBSCAN, con los parámetros probados, concentró a casi todos los clientes en un único \emph{cluster} y no logró distinguir perfiles. HDBSCAN tuvo métricas más bajas, pero permitió identificar 9 \emph{clusters} con perfiles intermedios entre el cliente activi y el perdido.
+		
 	
 	\chapter{Introducción}
 	
@@ -155,10 +156,15 @@
 	
 	\section{Motivación}
 	
-	En la actualidad, las plataformas de comercio electrónico (\emph{e-commerce}) generan un volumen masivo y constante de datos sobre las transacciones de sus usuarios. Sin embargo, disponer de una gran cantidad de datos no implica necesariamente contar con información útil. El principal desafío reside en transformar esos registros transaccionales en conocimiento práctico que sirva para orientar la toma de decisiones estratégicas. En un mercado competitivo, comprender cómo se comportan los clientes, con qué frecuencia compran y cuánto gastan resulta fundamental para diseñar estrategias de retención, optimizar recursos de \emph{marketing} y mejorar el valor a largo plazo de la base de clientes. Para abordar este análisis, es habitual recurrir a la segmentación mediante el modelo RFM (Recencia, Frecuencia y Monto) en combinación con algoritmos de aprendizaje no supervisado, \emph{clustering}. Esta metodología permite agrupar a los clientes de forma automática según la similitud de sus patrones de compra. Sin embargo, la aplicación de estos algoritmos en conjuntos de datos reales de \emph{e-commerce} presenta complejidades particulares. Las métricas suelen mostrar una marcada asimetría, con una gran concentración de clientes de bajo consumo y un grupo reducido de compradores mayoristas o atípicos que registran valores extremadamente altos. Teniendo esto en cuenta, los algoritmos tradicionales como \emph{K-means}, aunque muy extendidos por su sencillez y rapidez, pueden verse afectados por la presencia de estos valores extremos o por la asunción de que los grupos tienen formas geométricas regulares. Por su parte, las alternativas basadas en densidad, como DBSCAN e HDBSCAN, proponen en teoría una mayor flexibilidad para identificar agrupaciones de formas complejas y aislar observaciones atípicas sin forzarlas a pertenecer a un clúster.
+	En la actualidad, las plataformas de comercio electrónico (\emph{e-commerce}) generan un volumen masivo y constante de datos sobre las transacciones de sus usuarios. Sin embargo, disponer de una gran cantidad de datos no implica necesariamente contar con información útil. El principal desafío reside en transformar esos registros transaccionales en conocimiento práctico que sirva para orientar la toma de decisiones estratégicas. En un mercado competitivo, comprender cómo se comportan los clientes, con qué frecuencia compran y cuánto gastan resulta fundamental para diseñar estrategias de retención, optimizar recursos de \emph{marketing} y mejorar el valor a largo plazo de la base de clientes. Para abordar este análisis, es habitual recurrir a la segmentación mediante el modelo RFM (Recencia, Frecuencia y Monto) en combinación con algoritmos de aprendizaje no supervisado, \emph{clustering}. Esta metodología permite agrupar a los clientes de forma automática según la similitud de sus patrones de compra. Sin embargo, la aplicación de estos algoritmos en conjuntos de datos reales de \emph{e-commerce} presenta complejidades particulares. Las métricas suelen mostrar una marcada asimetría, con una gran concentración de clientes de bajo consumo y un grupo reducido de compradores mayoristas o atípicos que registran valores extremadamente altos. Teniendo esto en cuenta, los algoritmos tradicionales como K-\emph{means}, aunque muy extendidos por su sencillez y rapidez, pueden verse afectados por la presencia de estos valores extremos o por la asunción de que los grupos tienen formas geométricas regulares. Por su parte, las alternativas basadas en densidad, como DBSCAN e HDBSCAN, proponen en teoría una mayor flexibilidad para identificar agrupaciones de formas complejas y aislar observaciones atípicas sin forzarlas a pertenecer a un clúster.
 	La motivación de este trabajo surge de la necesidad de evaluar en la práctica el desempeño de estos tres enfoques sobre un conjunto de datos real (\emph{Online Retail II}). El objetivo es determinar en qué medida las métricas cuantitativas de calidad matemática coinciden con la utilidad real de cada segmentación para el negocio, identificando qué algoritmo logra el equilibrio más conveniente entre precisión técnica e interpretabilidad comercial.
 	
 	\section{Estado del Arte}
+	Segmentar clientes no es una idea nueva, \citet{smith1956} ya planteaba en los años cincuenta que dividir un mercado en grupos con necesidades parecidas permite adaptar mejor los productos y servicios a cada uno. Con el tiempo, la segmentación pasó a ser una pieza central en la relación con el cliente, porque no tiene sentido tratar igual a quien compra todas las semanas que a quien compró una sola vez hace dos años. En ese marco aparece el modelo RFM (Recencia, Frecuencia y Monto), popularizado por \citet{hughes1994}, que resume el comportamiento de compra de cada cliente en tred variables fáciles de calcular y de interpretar. Esa simplicidad explica por qué sigue usándose tanto, más que nada en comercio electrónico, donde hay muchos datos transaccionales.
+	
+	Un antecedente de este trabajo es el de \citet{chen2012}, que aplicaron RFM y K-\emph{means} sobre las transacciones de una tienda online del Reino Unido para entender mejor a sus clientes y orientar el marketing. Ese conjunto de datos, \emph{Online Retail}, terminó publicado en el repositorio de la UCI y es el antecesor del que usamos acá, \emph{Online Retail II}. \emph{Online Retail} tiene 541.909 registros y \emph{Online Retail II} tiene 1067371 de regustros, casi el doble. A partir de ahí hay muchísimos estudios que repiten el esquema RFM + K-\emph{means}, en general con la Siluetthe o el índice de Davies-Bouldin para elegir el número de grupos. K-\emph{means} \citep{macqueen1967} se volvió el método de referencia por ser rápido y fácil de explicar, aunque tiene límites conocidos: hay que fijar la cantidad de grupos de antemano, asume grupos más o menos esféricos y los valores extremos lo desvían bastante. En datos de compras esto tiene mucho peso, porque los pocos clientes que gastan muchísimo más que el resto aparecen en casi cualquier base de datos. Los métodos basados en densidad buscan resolver precisamente estas limitaciones. Por ejemplo, DBSCAN \citep{ester1996} no requiere definir previamente la cantidad de \emph{clusters}, lo que permite identificar agrupaciones de forma arbitraria y aísla como ruido aquellos puntos que no pertenecen a zonas de alta densidad. Los resultados en segmentación son diversos: \citet{lau2026} compararon K-\emph{means} y DBSCAN sobre RFM en un distribuidor minorista, y K-\emph{means} salió mejor en las métricas, mientras que DBSCAN terminó clasificando como ruido a clientes clave del negocio. Por otro lado, \citet{aimar2025} comparó cinco algoritmos, entre ellos K-\emph{means} y DBSCAN, sobre datos de \emph{e-commerce} del Reino Unido con RFM y con valor de vida del cliente, y marcó fortalezas y debilidades distintas según el objetivo de negocio.
+	
+	HDBSCAN \citep{campello2013} extiende DBSCAN con un enfoque jerárquico, de modo que ya no hace falta fijar una única distancia y se pueden detectar grupos de densidades distintas. La implementación de \citet{mcinnes2017} lo hizo accesible en Python.
 	
 %	\section{Conjuntos de Datos}
 	
@@ -410,10 +416,10 @@
 	En las siguientes subsecciones se describe cómo se aplicó cada uno de los tres algoritmos sobre las variables RFM escaladas, y qué criterios se utilizaron para seleccionar sus respectivos parámetros. En todas ellas, un punto es un registro del dataset, es decir, un cliente descrito por sus variables numéricas (Recencia, Frecuencia y Monto).
 	
 	
-	\subsection{K-means}
+	\subsection{K-\emph{means}}
 	\label{sec:metodologia_kmeans}
 	
-	El primer algoritmo aplicado fue \emph{K-means}, un método de \emph{clustering} particional que agrupa las observaciones en $k$ clusters, donde $k$ es justamente el valor que da nombre al método, buscando minimizar la distancia entre cada punto y el centroide de su \emph{cluster}. A diferencia de DBSCAN y HDBSCAN, \emph{K-means} requiere que se especifique de antemano la cantidad de \emph{clusters} a formar, por lo que el primer paso fue determinar un valor adecuado de $k$. Para esto se utilizó el método del codo, que consiste en ejecutar el algoritmo con distintos valores de $k$ y registrar, en cada caso, la inercia resultante (la suma de las distancias al cuadrado entre cada punto y su centroide). A medida que $k$ aumenta, la inercia disminuye de forma natural, pero llega un punto en el que agregar \emph{clusters} adicionales deja de aportar una mejora significativa. Ese punto de quiebre, visualizado como un ``codo'' en el gráfico, se toma como una buena referencia para elegir $k$.
+	El primer algoritmo aplicado fue K-\emph{means}, un método de \emph{clustering} particional que agrupa las observaciones en $k$ \emph{clusters}, donde $k$ es justamente el valor que da nombre al método, buscando minimizar la distancia entre cada punto y el centroide de su \emph{cluster}. A diferencia de DBSCAN y HDBSCAN, K-\emph{means} requiere que se especifique de antemano la cantidad de \emph{clusters} a formar, por lo que el primer paso fue determinar un valor adecuado de $k$. Para esto se utilizó el método del codo, que consiste en ejecutar el algoritmo con distintos valores de $k$ y registrar, en cada caso, la inercia resultante (la suma de las distancias al cuadrado entre cada punto y su centroide). A medida que $k$ aumenta, la inercia disminuye de forma natural, pero llega un punto en el que agregar \emph{clusters} adicionales deja de aportar una mejora significativa. Ese punto de quiebre, visualizado como un ``codo'' en el gráfico, se toma como una buena referencia para elegir $k$.
 	
 	La Figura~\ref{fig:codo-k} muestra la inercia obtenida para valores de $k$ entre 2 y 10. Se ve una caída pronunciada hasta $k=4$ o $k=5$ y, a partir de ahi la curva se va aplanando considerablemente. Tomando esto como referencia, se probó el algoritmo tanto con $k = 4$ como con $k = 5$, para comparar ambas segmentaciones y evaluar cuál resulta más interpretable y proporciona una mejor separación de grupos según las métricas internas Silhouette, Davies-Bouldin y Calinski-Harabasz, que se detallan en la Sección 2.4.
 	
@@ -428,7 +434,7 @@
 		
 	\subsection{DBSCAN}
 	
-	El segundo algoritmo aplicado fue DBSCAN (\emph{Density-Based Spatial Clustering of Applications with Noise}), un método de \emph{clustering} basado en densidad que agrupa los puntos que están suficientemente cerca entre sí, y marca como ruido a los que quedan aislados. A diferencia de \emph{K-means}, DBSCAN no necesita que se le indique de antemano la cantidad de clusters a formar; en cambio, requiere dos parámetros: \texttt{eps}, la distancia máxima entre dos puntos para que se consideren vecinos, y \texttt{min\_puntos}, la cantidad mínima de vecinos que necesita un punto para ser considerado parte de un \emph{cluster}. Para elegir estos parámetros se hizo una búsqueda combinando distintos valores de \texttt{eps} y \texttt{min\_puntos}, y para cada combinación se registró la cantidad de \emph{clusters} formados y la cantidad (y porcentaje) de puntos clasificados como ruido. Las primeras corridas, con valores de \texttt{eps} más altos, agrupaban a casi todos los clientes en un único \emph{cluster}, mientras que valores muy bajos de \texttt{eps} fragmentaban el \emph{dataset} en decenas de \emph{clusters} de apenas 3 o 4 clientes cada uno. Ninguno de estos dos extremos resulta útil para una segmentación interpretable. La Tabla~\ref{tab:gridsearch-dbscan} muestra los resultados de probar distintas combinaciones de \texttt{eps} y \texttt{min\_puntos} donde se ve un patrón bastante claro: a medida que \texttt{eps} crece, el algoritmo tiende a juntar todo en un solo \emph{cluster}, y el porcentaje de ruido baja cada vez más. Con valores de \texttt{eps} chicos pasa lo contrario, aparecen más \emph{clusters}, pero también sube el ruido.
+	El segundo algoritmo aplicado fue DBSCAN (\emph{Density-Based Spatial Clustering of Applications with Noise}), un método de \emph{clustering} basado en densidad que agrupa los puntos que están suficientemente cerca entre sí, y marca como ruido a los que quedan aislados. A diferencia de K-\emph{means}, DBSCAN no necesita que se le indique de antemano la cantidad de \emph{clusters} a formar; en cambio, requiere dos parámetros: \texttt{eps}, la distancia máxima entre dos puntos para que se consideren vecinos, y \texttt{min\_puntos}, la cantidad mínima de vecinos que necesita un punto para ser considerado parte de un \emph{cluster}. Para elegir estos parámetros se hizo una búsqueda combinando distintos valores de \texttt{eps} y \texttt{min\_puntos}, y para cada combinación se registró la cantidad de \emph{clusters} formados y la cantidad (y porcentaje) de puntos clasificados como ruido. Las primeras corridas, con valores de \texttt{eps} más altos, agrupaban a casi todos los clientes en un único \emph{cluster}, mientras que valores muy bajos de \texttt{eps} fragmentaban el \emph{dataset} en decenas de \emph{clusters} de apenas 3 o 4 clientes cada uno. Ninguno de estos dos extremos resulta útil para una segmentación interpretable. La Tabla~\ref{tab:gridsearch-dbscan} muestra los resultados de probar distintas combinaciones de \texttt{eps} y \texttt{min\_puntos} donde se ve un patrón bastante claro: a medida que \texttt{eps} crece, el algoritmo tiende a juntar todo en un solo \emph{cluster}, y el porcentaje de ruido baja cada vez más. Con valores de \texttt{eps} chicos pasa lo contrario, aparecen más \emph{clusters}, pero también sube el ruido.
 	Se terminó eligiendo \texttt{eps}=0{,}2 y \texttt{min\_puntos}=5, que da 4 \emph{clusters} con un 3{,}40\% de ruido. Aunque hay combinaciones con menos ruido, la mayoría de esas terminan agrupando a casi todos los clientes en un único \emph{cluster}, lo cual no sirve para el objetivo de armar una segmentación.
 	
 	\begin{table}[h]
@@ -471,7 +477,7 @@
 	\subsection{HDBSCAN}
 	
 	El tercer algoritmo que se aplicó fue HDBSCAN (\emph{Hierarchical Density-Based Spatial Clustering of Applications with Noise}). A diferencia de DBSCAN, no hace falta fijar un valor de \texttt{eps} de antemano debido a que esta técnica construye una jerarquía de \emph{clusters} a distintos niveles de densidad y selecciona automáticamente los \emph{clusters} más estables de esa jerarquía. El parámetro principal es \texttt{min\_cluster\_size}, el tamaño mínimo que tiene que tener un grupo para considerarse un \emph{cluster}; también se puede ajustar \texttt{min\_samples}, que regula qué tan estricto es el algoritmo a la hora de decidir qué es ruido. 
-	Al igual que con DBSCAN, se hizo una búsqueda combinando distintos valores de \texttt{min\_cluster\_size} y \texttt{min\_samples}. La Tabla~\ref{tab:gridsearch-hdbscan} muestra los resultados de probar distintas combinaciones de \texttt{min\_cluster\_size} y \texttt{min\_samples}. Con valores bajos de \texttt{min\_cluster\_size} (entre 10 y 100), el algoritmo formaba muchos \emph{clusters} chicos, entre 50 y 115, algo poco útil para una segmentación interpretable. A medida que se subió el valor para  \texttt{min\_cluster\_size}, la cantidad de \emph{clusters} bajó de forma consistente, hasta llegar a valores más manejables (4 a 7 \emph{clusters}) con \texttt{min\_cluster\_size} entre 300 y 500. Un aspecto que se mantuvo constante en toda la búsqueda fue el porcentaje de ruido, que se movió siempre entre 20\% y 39\% sin importar mucho la combinación de parámetros elegida. En un principio se había elegido \texttt{min\_cluster\_size}=500 y \texttt{min\_samples}=3, buscando una cantidad de \emph{clusters} parecida a la que se usó en \emph{K-means}. Pero después se probó también la combinación con menos ruido de toda la grilla de busqueda, \texttt{min\_cluster\_size}=200 y \texttt{min\_samples}=1, para ver qué tan buena era esa alternativa.
+	Al igual que con DBSCAN, se hizo una búsqueda combinando distintos valores de \texttt{min\_cluster\_size} y \texttt{min\_samples}. La Tabla~\ref{tab:gridsearch-hdbscan} muestra los resultados de probar distintas combinaciones de \texttt{min\_cluster\_size} y \texttt{min\_samples}. Con valores bajos de \texttt{min\_cluster\_size} (entre 10 y 100), el algoritmo formaba muchos \emph{clusters} chicos, entre 50 y 115, algo poco útil para una segmentación interpretable. A medida que se subió el valor para  \texttt{min\_cluster\_size}, la cantidad de \emph{clusters} bajó de forma consistente, hasta llegar a valores más manejables (4 a 7 \emph{clusters}) con \texttt{min\_cluster\_size} entre 300 y 500. Un aspecto que se mantuvo constante en toda la búsqueda fue el porcentaje de ruido, que se movió siempre entre 20\% y 39\% sin importar mucho la combinación de parámetros elegida. En un principio se había elegido \texttt{min\_cluster\_size}=500 y \texttt{min\_samples}=3, buscando una cantidad de \emph{clusters} parecida a la que se usó en K-\emph{means}. Pero después se probó también la combinación con menos ruido de toda la grilla de busqueda, \texttt{min\_cluster\_size}=200 y \texttt{min\_samples}=1, para ver qué tan buena era esa alternativa.
 	
 	\begin{table}[h]
 		\centering
@@ -517,9 +523,8 @@
 	El coeficiente de Silhouette mide qué tan bien separado está cada punto de los demás \emph{clusters} en relación a su propio \emph{cluster}. La idea de fondo es simple: un punto está bien agrupado si está cerca de los demás puntos de su \emph{cluster} y, al mismo tiempo, lejos de los puntos del \emph{cluster} más cercano. Para cuantificar esto, para cada observación se calculan dos distancias promedio: la distancia promedio a los puntos de su propio \emph{cluster}, y la distancia promedio a los puntos del \emph{cluster} vecino más cercano (es decir, el segundo \emph{cluster} más parecido a esa observación). Después se calcula la diferencia entre ambas distancias, normalizada para quedar en un rango de $-1$ a $1$:
 	
 	\begin{equation}
-		s(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}}
+		s(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}},
 	\end{equation}
-	
 	donde $a(i)$ es la distancia promedio entre el punto $i$ y el resto de los puntos de su mismo \emph{cluster}, y $b(i)$ es la distancia promedio entre el punto $i$ y los puntos del \emph{cluster} vecino más cercano.
 	
 	El valor de $s(i)$ se puede interpretar de la siguiente manera: si $b(i)$ es mucho mayor que $a(i)$, quiere decir que el punto $i$ está mucho más cerca de su propio \emph{cluster} que del \emph{cluster} vecino, y $s(i)$ se acerca a $1$, lo cual indica una buena asignación. Si $a(i)$ y $b(i)$ son parecidos, $s(i)$ se acerca a $0$, lo que sugiere que el punto está en el límite entre dos \emph{clusters}. Y si $a(i)$ termina siendo mayor que $b(i)$, es decir que el punto está en realidad más cerca del \emph{cluster} vecino que del suyo propio, $s(i)$ toma valores negativos, lo que sugiere que probablemente fue asignado al \emph{cluster} equivocado.
@@ -529,9 +534,8 @@
 	El índice de Davies-Bouldin $DB$ evalúa la relación entre la dispersión dentro de cada \emph{cluster} y la distancia entre los centros de los distintos \emph{clusters}. La lógica detrás de esta métrica es que un buen \emph{cluster} debería ser compacto (los puntos dentro de él no deberían estar muy dispersos) y, al mismo tiempo, debería estar bien alejado de los demás \emph{clusters}. Para capturar esta característica, para cada \emph{cluster} se busca el peor caso posible: el \emph{cluster} vecino con el cual la relación entre dispersión y distancia sea más desfavorable, es decir, aquel que combine alta dispersión con poca distancia entre centroides:
 	
 	\begin{equation}
-		DB = \frac{1}{k} \sum_{i=1}^{k} \max_{j \neq i} \left\{ \frac{\sigma_i + \sigma_j}{d(c_i, c_j)} \right\}
+		DB = \frac{1}{k} \sum_{i=1}^{k} \max_{j \neq i} \left\{ \frac{\sigma_i + \sigma_j}{d(c_i, c_j)} \right\},
 	\end{equation}
-	
 	donde $k$ es la cantidad de \emph{clusters}, $\sigma_i$ es la dispersión promedio dentro del \emph{cluster} $i$ (qué tan lejos están en promedio los puntos del \emph{cluster} respecto a su centroide), y $d(c_i, c_j)$ es la distancia entre los centroides de los \emph{clusters} $i$ y $j$ para $i,j=1,2,\dots,k$.
 	
 	Para cada \emph{cluster} $i$, el término $\frac{\sigma_i + \sigma_j}{d(c_i, c_j)}$ se calcula contra todos los demás \emph{clusters} $j$, y se queda con el valor máximo, es decir, con la peor comparación posible para ese \emph{cluster}. Esto tiene sentido porque a un \emph{cluster} le alcanza con estar mal separado de uno solo de sus vecinos para que se considere una segmentación ineficiente, aunque esté bien separado del resto. Después, el índice de Davies-Bouldin final se obtiene promediando ese peor caso entre todos los \emph{clusters}.
@@ -541,9 +545,8 @@
 	El índice de Calinski-Harabasz $CH$, también conocido como criterio de razón de varianza, compara la dispersión entre \emph{clusters} con la dispersión dentro de cada \emph{cluster}. La idea es parecida a la de un análisis de varianza: si los \emph{clusters} están bien definidos, los puntos deberían variar poco respecto al centro de su propio \emph{cluster} (dispersión dentro del \emph{cluster}), pero los centros de los distintos \emph{clusters} deberían estar bastante alejados entre sí (dispersión entre \emph{clusters}). El índice se calcula como:
 	
 	\begin{equation}
-		CH = \frac{\text{tr}(B_k)}{\text{tr}(W_k)} \times \frac{n - k}{k - 1}
+		CH = \frac{\text{tr}(B_k)}{\text{tr}(W_k)} \times \frac{n - k}{k - 1},
 	\end{equation}
-	
 	donde $n$ es la cantidad total de observaciones, $k$ la cantidad de \emph{clusters}, $B_k$ la matriz de dispersión entre \emph{clusters} y $W_k$ la matriz de dispersión dentro de los \emph{clusters}.
 	
 	La matriz $B_k$ mide qué tan separados están los centroides de cada \emph{cluster} respecto al centroide general de todos los datos, ponderado por la cantidad de puntos en cada \emph{cluster}; su traza  resume esa dispersión entre \emph{clusters} en un solo número. La matriz $W_k$, por su parte, mide qué tan dispersos están los puntos dentro de cada \emph{cluster} respecto a su propio centroide, y su traza resume esa dispersión interna. El cociente entre las tazas da entonces una idea directa de qué tan grande es la separación entre \emph{clusters} en relación a la compactación dentro de cada uno.
@@ -575,19 +578,19 @@
 
 
 	
-	\section{Resultados de K-means}
+	\section{Resultados de K-\emph{means}}
 	
-	Se ejecutó K-means con $k=4$ y con $k=5$, tal como se planteó en la Sección~\ref{sec:metodologia_kmeans}. Para cada \emph{cluster} se calcularon los promedios de Recencia, Frecuencia y Monto, para poder interpretar qué tipo de cliente representa cada grupo.
+	Se aplicó K-\emph{means} con $k=4$ y con $k=5$, tal como se planteó en la Sección~\ref{sec:metodologia_kmeans}. Para cada \emph{Cluster} se calcularon los promedios de Recencia, Frecuencia y Monto, para poder interpretar qué tipo de cliente representa cada grupo.
 	
-	\subsubsection{K-means con $k=4$}
+	\subsubsection{K-\emph{means} con $k=4$}
 	
 	\begin{table}[H]
 		\centering
-		\caption{Resumen de clusters: K-means con $k=4$.}
+		\caption{Resumen de \emph{Clusters}: K-\emph{means} con $k=4$.}
 		\label{tab:kmeans-k4}
 		\begin{tabular}{lrrrr}
 			\toprule
-			Cluster & Clientes & Recencia promedio & Frecuencia promedio & Monto promedio \\
+			\emph{Cluster} & Clientes & Recencia promedio & Frecuencia promedio & Monto promedio \\
 			\midrule
 			0 & 1.842 & 462{,}79 & 2{,}19   & 683{,}60 \\
 			1 & 34    & 26{,}26  & 104{,}62 & 80.479{,}43 \\
@@ -600,60 +603,60 @@
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/rfm_3d_kmeans_k4.png}
-		\caption{Distribución de clientes según K-Means: k=4.}
+		\caption{Distribución de clientes según K-\emph{Means}: k=4.}
 		\label{fig:k4-3d}
 	\end{figure}
 	
-	La Tabla~\ref{tab:kmeans-k4} y la Figura~\ref{fig:k4-3d} muestran que el \emph{cluster} 2 es el más numeroso, con 3.473 clientes: compran cada dos meses aproximadamente y gastan en promedio \$2.825{,}44, un perfil de cliente activo y regular. El \emph{cluster} 0, con 1.842 clientes, agrupa a quienes hace mucho que no compran (462 días en promedio) y con un gasto bajo, lo que sugiere clientes inactivos o perdidos. El \emph{cluster} 1, más chico (34 clientes), es el que más compra y más gasta: más de 100 facturas y cerca de \$80.479 en promedio, muy por encima del resto. Por último, el \emph{cluster} 3 queda formado por un único cliente, con un monto total de \$580.987{,}04 y 145 facturas, muy por encima de cualquier otro cliente de la base. Este resultado es consistente con lo discutido en la Sección~\ref{sec:escalamiento_variables}, donde ya se había identificado la presencia de un cliente con valores de compra extremos respecto al resto.
+	La Tabla~\ref{tab:kmeans-k4} y la Figura~\ref{fig:k4-3d} muestran que el \emph{Cluster} 2 es el más numeroso, con 3.473 clientes: compran cada dos meses aproximadamente y gastan en promedio \$2.825{,}44, un perfil de cliente activo y regular. El \emph{Cluster} 0, con 1.842 clientes, agrupa a quienes hace mucho que no compran (462 días en promedio) y con un gasto bajo, lo que sugiere clientes inactivos o perdidos. El \emph{Cluster} 1, más chico (34 clientes), es el que más compra y más gasta: más de 100 facturas y cerca de \$80.479 en promedio, muy por encima del resto. Por último, el \emph{Cluster} 3 queda formado por un único cliente, con un monto total de \$580.987{,}04 y 145 facturas, muy por encima de cualquier otro cliente de la base. Este resultado es consistente con lo discutido en la Sección~\ref{sec:escalamiento_variables}, donde ya se había identificado la presencia de un cliente con valores de compra extremos respecto al resto.
 	
-	Para complementar la vista en tres dimensiones, también se armaron gráficos de a pares de variables, que permiten ver mejor cómo quedan separados los grupos. Estos gráficos son solo una forma de visualizar el resultado: los \emph{clusters} se calcularon con las tres variables a la vez, y cada figura muestra la proyección de esos mismos grupos sobre dos de ellas. En la Figura~\ref{fig:clusters_recencia_frecuencia} se aprecia bastante bien la diferencia entre los \emph{clusters}: el grupo con mayor recencia y baja frecuencia queda claramente aparte del resto, mientras que el cluster más numeroso se concentra en valores bajos de recencia. Al mirar los pares que se muestran en Figuras~\ref{fig:clusters_frecuencia_monto} y \ref{fig:clusters_recencia_monto} que incluyen el Monto, aparece de nuevo el mismo problema que se vio en el escalamiento: hay un cliente con un monto tan alto que el resto de los puntos queda apretado contra el eje, y no se distinguen bien los \emph{clusters}. Por eso se armó una segunda versión de cada gráfico, dejando fuera de la vista ese valor extremo, sin sacarlo del análisis, solo de la figura, para poder ver mejor cómo se separan los demás \emph{clusters}. Se puede ver en las versiones con zoom de las  Figuras~\ref{fig:clusters_frecuencia_monto_zoom} y \ref{fig:clusters_recencia_monto_zoom} que casi no aparecen los \emph{clusters} de mayor monto y frecuencia, ya que son justamente los que quedan afuera del recorte pero no porque hayan desaparecido, sino porque son los valores más altos que se dejaron fuera a propósito.
+	Para complementar la vista en tres dimensiones, también se armaron gráficos de a pares de variables, que permiten ver mejor cómo quedan separados los grupos. Estos gráficos son solo una forma de visualizar el resultado: los \emph{clusters} se calcularon con las tres variables a la vez, y cada figura muestra la proyección de esos mismos grupos sobre dos de ellas. En la Figura~\ref{fig:clusters_recencia_frecuencia} se aprecia bastante bien la diferencia entre los \emph{clusters}: el grupo con mayor recencia y baja frecuencia queda claramente aparte del resto, mientras que el \emph{cluster} más numeroso se concentra en valores bajos de recencia. Al mirar los pares que se muestran en Figuras~\ref{fig:clusters_frecuencia_monto} y \ref{fig:clusters_recencia_monto} que incluyen el Monto, aparece de nuevo el mismo problema que se vio en el escalamiento: hay un cliente con un monto tan alto que el resto de los puntos queda apretado contra el eje, y no se distinguen bien los \emph{clusters}. Por eso se armó una segunda versión de cada gráfico, dejando fuera de la vista ese valor extremo, sin sacarlo del análisis, solo de la figura, para poder ver mejor cómo se separan los demás \emph{clusters}. Se puede ver en las versiones con zoom de las  Figuras~\ref{fig:clusters_frecuencia_monto_zoom} y \ref{fig:clusters_recencia_monto_zoom} que casi no aparecen los \emph{clusters} de mayor monto y frecuencia, ya que son justamente los que quedan afuera del recorte pero no porque hayan desaparecido, sino porque son los valores más altos que se dejaron fuera a propósito.
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_recencia_frecuencia_k4.png}
-		\caption{Visualización de los \emph{clusters} ($k=4$) en el plano Recencia-Frecuencia.}
+		\caption{Visualización de los \emph{clusters} obtenidos con K-\emph{means} ($k=4$) en el plano Recencia-Frecuencia.}
 		\label{fig:clusters_recencia_frecuencia}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_frecuencia_monto_k4.png}
-		\caption{Visualización de los \emph{clusters} ($k=4$) en el plano Frecuencia-Monto.}
+		\caption{Visualización de los \emph{clusters} obtenidos con K-\emph{means} ($k=4$) en el plano Frecuencia-Monto.}
 		\label{fig:clusters_frecuencia_monto}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_frecuencia_monto_zoom.png}
-		\caption{Visualización con zoom de los \emph{clusters} ($k=4$) en el plano Frecuencia-Monto.}
+		\caption{Visualización con zoom de los \emph{clusters} obtenidos con K-\emph{means} ($k=4$) en el plano Frecuencia-Monto.}
 		\label{fig:clusters_frecuencia_monto_zoom}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_recencia_monto_k4.png}
-		\caption{Visualización de los \emph{clusters} ($k=4$) en el plano Recencia-Monto.}
+		\caption{Visualización de los \emph{clusters} obtenidos con K-\emph{means} ($k=4$) en el plano Recencia-Monto.}
 		\label{fig:clusters_recencia_monto}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_recencia_monto_zoom.png}
-		\caption{Visualización con zoom de los \emph{clusters} ($k=4$) en el plano Recencia-Monto.}
+		\caption{Visualización con zoom de los \emph{clusters} obtenidos con K-\emph{means} ($k=4$) en el plano Recencia-Monto.}
 		\label{fig:clusters_recencia_monto_zoom}
 	\end{figure}
 	
 	
-	\subsubsection{\emph{K-means} con $k=5$}
+	\subsubsection{K-\emph{means} con $k=5$}
 	
 	
 	\begin{table}[H]
 		\centering
-		\caption{Resumen de \emph{clusters}: \emph{K-means} con $k=5$.}
+		\caption{Resumen de \emph{clusters}: K-\emph{means} con $k=5$.}
 		\label{tab:kmeans-k5}
 		\begin{tabular}{lrrrr}
 			\toprule
-			Cluster & Clientes & Recencia promedio & Frecuencia promedio & Monto promedio \\
+			\emph{Cluster} & Clientes & Recencia promedio & Frecuencia promedio & Monto promedio \\
 			\midrule
 			0 & 3.240 & 74{,}82  & 5{,}36   & 1.794{,}78 \\
 			1 & 21    & 23{,}86  & 125{,}62 & 103.602{,}85 \\
@@ -667,46 +670,46 @@
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/rfm_3d_kmeans_k5.png}
-		\caption{Distribución de clientes según \emph{K-Means}: $k=5$.}
+		\caption{Distribución de clientes según K-\emph{Means}: $k=5$.}
 		\label{fig:k5-3d}
 	\end{figure}
 	
-	Por otro lado, podemos ver en la Tabla~\ref{tab:kmeans-k5} y en la Figura~\ref{fig:k5-3d} que con $k=5$, los \emph{clusters} de clientes inactivos (\emph{cluster} 2) y de clientes regulares (\emph{cluster} 0) se mantienen prácticamente iguales a los obtenidos con $k=4$. La diferencia más importante está en el \emph{cluster} de alto valor que teníamos con $k=4$ el cual aquí se divide en dos. Por un lado queda un grupo chico de 21 clientes con un comportamiento de compra extremo, con 125 facturas y \$103.602 de gasto promedio. Por otro lado queda un grupo más grande, de 315 clientes, que también compran seguido y gastan bastante (30 facturas y \$14.647{,}99 en promedio), pero no tanto como el grupo anterior. Esto permite ver con más detalle a los clientes de mayor valor, algo que con $k=4$ quedaba todo junto en un solo \emph{cluster}. Al igual que con $k=4$, aparece el \emph{cluster} 4 que contiene solamente al mismo cliente con valores muy altos.
+	Por otro lado, podemos ver en la Tabla~\ref{tab:kmeans-k5} y en la Figura~\ref{fig:k5-3d} que con $k=5$, los \emph{clusters} de clientes inactivos (\emph{Cluster} 2) y de clientes regulares (\emph{Cluster} 0) se mantienen prácticamente iguales a los obtenidos con $k=4$. La diferencia más importante está en el \emph{Cluster} de alto valor que teníamos con $k=4$ el cual aquí se divide en dos. Por un lado queda un grupo chico de 21 clientes con un comportamiento de compra extremo, con 125 facturas y \$103.602 de gasto promedio. Por otro lado queda un grupo más grande, de 315 clientes, que también compran seguido y gastan bastante (30 facturas y \$14.647{,}99 en promedio), pero no tanto como el grupo anterior. Esto permite ver con más detalle a los clientes de mayor valor, algo que con $k=4$ quedaba todo junto en un solo \emph{Cluster}. Al igual que con $k=4$, aparece el \emph{Cluster} 4 que contiene solamente al mismo cliente con valores muy altos.
 	
-	Con k=5, la separación entre los clientes queda un poco más fina. En la Figura~\ref{fig:clusters_recencia_frecuencia_k5} aparece un grupo nuevo que con $k=4$ no se distinguía tanto: clientes con recencia baja o media y algo más de frecuencia que el resto, que forman una franja propia entre el grupo más inactivo y el más numeroso. Al igual que con $k=4$, el cliente con el monto extremo vuelve a ocultar la diferencia entre los \emph{clusters} en los gráficos que incluyen el monto, tanto para la Figura~\ref{fig:clusters_frecuencia_monto_k5} y \ref{fig:clusters_recencia_monto_k5}, así que se armaron las mismas versiones con zoom para este caso. En la Figura~\ref{fig:clusters_frecuencia_monto_zoom_k5} se nota mucho mejor cómo quedan los tres grupos principales: uno con los montos más altos, otro en un nivel intermedio, y el más numeroso con los montos más bajos. Lo mismo se repite al mirar la Recencia en la Figura~\ref{fig:clusters_recencia_monto_zoom_k5}, donde esa separación se ve bastante más prolija que la que se había obtenido con $k=4$.
+	Con $k=5$, la separación entre los clientes queda un poco más fina. En la Figura~\ref{fig:clusters_recencia_frecuencia_k5} aparece un grupo nuevo que con $k=4$ no se distinguía tanto: clientes con recencia baja o media y algo más de frecuencia que el resto, que forman una franja propia entre el grupo más inactivo y el más numeroso. Al igual que con $k=4$, el cliente con el monto extremo vuelve a ocultar la diferencia entre los \emph{clusters} en los gráficos que incluyen el monto, tanto para la Figura~\ref{fig:clusters_frecuencia_monto_k5} y \ref{fig:clusters_recencia_monto_k5}, así que se armaron las mismas versiones con zoom para este caso. En la Figura~\ref{fig:clusters_frecuencia_monto_zoom_k5} se nota mucho mejor cómo quedan los tres grupos principales: uno con los montos más altos, otro en un nivel intermedio, y el más numeroso con los montos más bajos. Lo mismo se repite al mirar la Recencia en la Figura~\ref{fig:clusters_recencia_monto_zoom_k5}, donde esa separación se ve bastante más prolija que la que se había obtenido con $k=4$.
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_recencia_frecuencia_k5.png}
-		\caption{Visualización de los \emph{clusters} ($k=5$) en el plano Recencia-Frecuencia.}
+		\caption{Visualización de los \emph{clusters} obtenidos con K-\emph{means} ($k=5$) en el plano Recencia-Frecuencia.}
 		\label{fig:clusters_recencia_frecuencia_k5}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_frecuencia_monto_k5.png}
-		\caption{Visualización de los \emph{clusters} ($k=5$) en el plano Frecuencia-Monto.}
+		\caption{Visualización de los \emph{clusters} obtenidos con K-\emph{means} ($k=5$) en el plano Frecuencia-Monto.}
 		\label{fig:clusters_frecuencia_monto_k5}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_frecuencia_monto_zoom_k5.png}
-		\caption{Visualización con zoom de los \emph{clusters} ($k=5$) en el plano Frecuencia-Monto.}
+		\caption{Visualización con zoom de los \emph{clusters} obtenidos con K-\emph{means} ($k=5$) en el plano Frecuencia-Monto.}
 		\label{fig:clusters_frecuencia_monto_zoom_k5}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_recencia_monto_k5.png}
-		\caption{Visualización de los \emph{clusters} ($k=5$) en el plano Recencia-Monto.}
+		\caption{Visualización de los \emph{clusters} obtenidos con K-\emph{means} ($k=5$) en el plano Recencia-Monto.}
 		\label{fig:clusters_recencia_monto_k5}
 	\end{figure}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/clusters_recencia_monto_zoom_k5.png}
-		\caption{Visualización con zoom de los \emph{clusters} ($k=5$) en el plano Recencia-Monto.}
+		\caption{Visualización con zoom de los \emph{clusters} obtenidos con K-\emph{means} ($k=5$) en el plano Recencia-Monto.}
 		\label{fig:clusters_recencia_monto_zoom_k5}
 	\end{figure}
 	
@@ -719,7 +722,7 @@
 		\label{tab:dbscan-resumen}
 		\begin{tabular}{lrrrr}
 			\toprule
-			Cluster & Clientes & Recencia promedio & Frecuencia promedio & Monto promedio \\
+			\emph{Cluster} & Clientes & Recencia promedio & Frecuencia promedio & Monto promedio \\
 			\midrule
 			Ruido ($-1$) & 182   & 126{,}33 & 42{,}05 & 32.350{,}80 \\
 			0             & 5.153 & 205{,}49 & 4{,}98  & 1.638{,}17 \\
@@ -737,17 +740,17 @@
 		\label{fig:dbscan-3d}
 	\end{figure}
 	
-	Observando la Tabla~\ref{tab:dbscan-resumen}, que muestra el resumen de los \emph{clusters} que se obtuvo con estos parámetros incluyendo el grupo de ruido (etiqueta $-1$), y la Figura~\ref{fig:dbscan-3d} se ve el problema: el \emph{cluster} 0 se queda con 5.153 de los 5.350 clientes, casi todos los registros. Los \emph{clusters} 1, 2 y 3 son grupos de 4 a 7 clientes solamente, así que no sirven mucho para segmentar. Lo más llamativo pasa en el grupo de ruido. Esos 182 clientes tienen en promedio 42 compras y \$32.350{,}80 de monto, muy por encima del resto. O sea, DBSCAN no armó un \emph{cluster} para los clientes de mayor valor, sino que los dejó afuera como ruido, porque no cumplían el criterio de densidad que fijan \texttt{eps} y \texttt{min\_puntos}.
+	Observando la Tabla~\ref{tab:dbscan-resumen}, que muestra el resumen de los \emph{clusters} que se obtuvo con estos parámetros incluyendo el grupo de ruido (etiqueta $-1$), y la Figura~\ref{fig:dbscan-3d} se ve el problema: el \emph{Cluster} 0 se queda con 5.153 de los 5.350 clientes, casi todos los registros. Los \emph{Clusters} 1, 2 y 3 son grupos de 4 a 7 clientes solamente, así que no sirven mucho para segmentar. Lo más llamativo pasa en el grupo de ruido. Esos 182 clientes tienen en promedio 42 compras y \$32.350{,}80 de monto, muy por encima del resto. O sea, DBSCAN no armó un \emph{Cluster} para los clientes de mayor valor, sino que los dejó afuera como ruido, porque no cumplían el criterio de densidad que fijan \texttt{eps} y \texttt{min\_puntos}.
 	
 	Esto muestra una limitación de DBSCAN con este tipo de datos: como usa un solo valor de \texttt{eps} para todo el \emph{dataset}, no logra adaptarse tanto a la zona densa de clientes habituales como a los clientes con comportamiento extremo. Estos últimos terminan casi todos como ruido en vez de agruparse. Esta limitación es la que lleva a probar HDBSCAN en la siguiente sección.
 	
-	Para DBSCAN se armaron los mismos gráficos de a pares de variables. Acá el resultado es bastante distinto al de \emph{K-means}. Como se puede observar en la Figura~\ref{fig:clusters_recencia_frecuencia_dbscan} se ve que casi todos los clientes quedan metidos en un solo grupo, el \emph{Cluster} 0, que se concentra en recencia baja y frecuencia baja. El resto de los puntos, los que tienen algún valor más alto o más raro en cualquiera de las variables, caen en el \emph{Cluster} -1, que no es en realidad un grupo de clientes parecidos entre sí, sino los casos que el algoritmo no pudo asignar a ningún \emph{cluster} (ruido). Esto se nota todavía más al mirar el Monto: en la Figura~\ref{fig:clusters_frecuencia_monto_dbscan} los \emph{clusters} 1, 2 y 3 son grupitos muy chicos, casi no se llegan a ver, y en la Figura~\ref{fig:clusters_recencia_monto_dbscan} vuelve a aparecer el mismo cliente con el monto extremo, esta vez catalogado como ruido.
-	En el fondo, lo que está haciendo DBSCAN acá no es separar a los clientes en distintos perfiles de comportamiento, sino más bien diferenciar entre los que se parecen a la mayoría y los que no. Esto confirma lo que ya se había visto al probar distintas combinaciones de \texttt{eps} y \texttt{min\_puntos}: no hay ninguna configuración que logre armar grupos parejos y con sentido para el negocio, como sí se consigue con \emph{K-means}.
+	Para DBSCAN se armaron los mismos gráficos de a pares de variables. Acá el resultado es bastante distinto al de K-\emph{means}. Como se puede observar en la Figura~\ref{fig:clusters_recencia_frecuencia_dbscan} se ve que casi todos los clientes quedan metidos en un solo grupo, el \emph{Cluster} 0, que se concentra en recencia baja y frecuencia baja. El resto de los puntos, los que tienen algún valor más alto o más raro en cualquiera de las variables, caen en el \emph{Cluster} -1, que no es en realidad un grupo de clientes parecidos entre sí, sino los casos que el algoritmo no pudo asignar a ningún \emph{Cluster} (ruido). Esto se nota todavía más al mirar el Monto: en la Figura~\ref{fig:clusters_frecuencia_monto_dbscan} los \emph{Clusters} 1, 2 y 3 son grupos muy chicos que casi no se llegan a ver, y en la Figura~\ref{fig:Clusters_recencia_monto_dbscan} vuelve a aparecer el mismo cliente con el monto extremo, esta vez catalogado como ruido.
+	En el fondo, lo que está haciendo DBSCAN en este caso no es separar a los clientes en distintos perfiles de comportamiento, sino más bien diferenciar entre los que se parecen a la mayoría y los que no. Esto confirma lo que ya se había visto al probar distintas combinaciones de \texttt{eps} y \texttt{min\_puntos}: no hay ninguna configuración que logre armar grupos parejos y con sentido para el negocio, como sí se consigue con K-\emph{means}.
 	
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=0.8\textwidth]{../graficos/clusters_recencia_frecuencia_dbscan.png}
-		\caption{Visualización de los \emph{clusters} DBSCAN en el plano Recencia-Frecuencia.}
+		\includegraphics[width=0.8\textwidth]{../graficos/Clusters_recencia_frecuencia_dbscan.png}
+		\caption{Visualización de los \emph{Clusters} DBSCAN en el plano Recencia-Frecuencia.}
 		\label{fig:clusters_recencia_frecuencia_dbscan}
 	\end{figure}
 	
@@ -789,11 +792,11 @@
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.8\textwidth]{../graficos/rfm_3d_hdbscan.png}
-		\caption{Distribución de clientes según HDBSCAN - \texttt{min\_cluster\_size}=500, \texttt{min\_samples}=3.}
+		\caption{Distribución de clientes según HDBSCAN - (\texttt{min\_cluster\_size}=500, \texttt{min\_samples}=3).}
 		\label{fig:hdbscan-3d}
 	\end{figure}
 	
-	A diferencia de DBSCAN, observando la Tabla~\ref{tab:hdbscan-resumen} y la Figura~\ref{tab:hdbscan-3d} se puede ver que acá los \emph{clusters} tienen tamaños mucho más parejos, entre 520 y 1.146 clientes cada uno, y se pueden diferenciar bastante bien entre sí. El \emph{cluster} 0 agrupa a los clientes más activos: compraron hace poco (48 días en promedio) y con una frecuencia relativamente alta (7{,}2 compras). El \emph{cluster} 4, en el otro extremo, junta a los clientes más inactivos: hace más de 500 días que no compran y solo hicieron una compra en total. Los \emph{clusters} 2 y 3 son parecidos entre sí, ambos con clientes de baja frecuencia (1 a 2 compras) y montos bajos, pero se diferencian en la recencia. El grupo de ruido vuelve a ser el más interesante: son 1.760 clientes, casi un tercio de los registros totales, con un monto promedio de \$6.401{,}98, muy por encima de cualquiera de los \emph{clusters} formados. Esto confirma lo que se planteó en la metodología: HDBSCAN no fuerza a estos clientes de comportamiento más variado a entrar en algún grupo, sino que los deja afuera como puntos que no encajan claramente en ninguna densidad definida. Con HDBSCAN el resultado se ve distinto a lo que pasaba con DBSCAN. Acá el ruido (\emph{Cluster} -1) no se concentra solamente en los casos más raros o extremos, sino que aparece repartido a lo largo de todo el rango de recencia, como se ve en la Figura~\ref{fig:clusters_recencia_frecuencia_hdbscan} hay clientes marcados como ruido tanto entre los que compraron hace poco como entre los que hace mucho que no vuelven. Los cinco \emph{clusters} que sí arma el algoritmo, en cambio, quedan todos agrupados en frecuencia y monto bajos, bastante pegados entre sí, algo que se repite tanto en la Figura~\ref{fig:clusters_frecuencia_monto_hdbscan} como en la Figura~\ref{fig:clusters_recencia_monto_hdbscan}. Por eso, al igual que se hizo con \emph{K-means}, se armó una versión con zoom de estos dos gráficos, dejando afuera de la vista al cliente con el monto más alto. En la Figura~\ref{fig:clusters_frecuencia_monto_zoom_hdbscan} se ve que los cinco \emph{clusters} no están mezclados entre sí, sino que se ordenan en franjas bastante marcadas, cada uno con un rango distinto de frecuencia y monto, quedando casi como escalones desde los clientes con menor actividad de compra hasta los que más compran y más gastan dentro de este grupo. Lo mismo se aprecia mirando la Recencia en la Figura~\ref{fig:clusters_recencia_monto_zoom_hdbscan}, donde esa misma separación en franjas se mantiene.
+	A diferencia de DBSCAN, observando la Tabla~\ref{tab:hdbscan-resumen} y la Figura~\ref{fig:hdbscan-3d} se puede ver que acá los \emph{clusters} tienen tamaños mucho más parejos, entre 520 y 1.146 clientes cada uno, y se pueden diferenciar bastante bien entre sí. El \emph{cluster} 0 agrupa a los clientes más activos: compraron hace poco (48 días en promedio) y con una frecuencia relativamente alta (7{,}2 compras). El \emph{cluster} 4, en el otro extremo, junta a los clientes más inactivos: hace más de 500 días que no compran y solo hicieron una compra en total. Los \emph{clusters} 2 y 3 son parecidos entre sí, ambos con clientes de baja frecuencia (1 a 2 compras) y montos bajos, pero se diferencian en la recencia. El grupo de ruido vuelve a ser el más interesante: son 1.760 clientes, casi un tercio de los registros totales, con un monto promedio de \$6.401{,}98, muy por encima de cualquiera de los \emph{clusters} formados. Esto confirma lo que se planteó en la metodología: HDBSCAN no fuerza a estos clientes de comportamiento más variado a entrar en algún grupo, sino que los deja afuera como puntos que no encajan claramente en ninguna densidad definida. Con HDBSCAN el resultado se ve distinto a lo que pasaba con DBSCAN. Acá el ruido (\emph{Cluster} -1) no se concentra solamente en los casos más raros o extremos, sino que aparece repartido a lo largo de todo el rango de recencia, como se ve en la Figura~\ref{fig:clusters_recencia_frecuencia_hdbscan} hay clientes marcados como ruido tanto entre los que compraron hace poco como entre los que hace mucho que no vuelven. Los cinco \emph{clusters} que sí arma el algoritmo, en cambio, quedan todos agrupados en frecuencia y monto bajos, bastante pegados entre sí, algo que se repite tanto en la Figura~\ref{fig:clusters_frecuencia_monto_hdbscan} como en la Figura~\ref{fig:clusters_recencia_monto_hdbscan}. Por eso, al igual que se hizo con K-\emph{means}, se armó una versión con zoom de estos dos gráficos, dejando afuera de la vista al cliente con el monto más alto. En la Figura~\ref{fig:clusters_frecuencia_monto_zoom_hdbscan} se ve que los cinco \emph{clusters} no están mezclados entre sí, sino que se ordenan en franjas bastante marcadas, cada uno con un rango distinto de frecuencia y monto, quedando casi como escalones desde los clientes con menor actividad de compra hasta los que más compran y más gastan dentro de este grupo. Lo mismo se aprecia mirando la Recencia en la Figura~\ref{fig:clusters_recencia_monto_zoom_hdbscan}, donde esa misma separación en franjas se mantiene.
 	
 	\begin{figure}[h]
 		\centering
@@ -838,9 +841,9 @@
 		\label{fig:jerarquia-hdbscan}
 	\end{figure}
 	
-	La Figura~\ref{fig:jerarquia-hdbscan} muestra el árbol condensado que construye HDBSCAN a partir del árbol de expansión mínima. En esta figura, el eje vertical representa el valor de $\lambda$ (inversamente proporcional a la distancia), y el ancho de cada rama indica la cantidad de puntos que la componen. Se puede ver cómo, a medida que aumenta $\lambda$ es decir, a medida que se pide más densidad, todos los clientes se van separando en ramas cada vez más finas. Al principio del gráfico se desprende una rama ancha que junta a la mayoría de los clientes, y más abajo esa rama se divide en varias más chicas que llegan hasta el final del árbol. Esas son las que HDBSCAN termina eligiendo como \emph{clusters} finales. Las ramas que se cortan antes de llegar al final son agrupaciones que el algoritmo no consideró lo bastante estables como para ser un \emph{cluster}, y esos puntos terminan como ruido.
+	La Figura~\ref{fig:jerarquia-hdbscan} muestra el árbol condensado que construye HDBSCAN a partir del árbol de expansión mínima. En esta figura, el eje vertical representa el valor de $\lambda$ (inversamente proporcional a la distancia), y el ancho de cada rama indica la cantidad de puntos que la componen. Se puede ver cómo, a medida que aumenta $\lambda$ es decir, a medida que se pide más densidad, todos los clientes se van separando en ramas cada vez más finas. Al principio del gráfico se desprende una rama ancha que junta a la mayoría de los clientes, y más abajo esa rama se divide en varias más chicas que llegan hasta el final del árbol. Esas ramas son las que HDBSCAN termina eligiendo como \emph{clusters} finales. Las ramas que se cortan antes de llegar al final son agrupaciones que el algoritmo no consideró lo bastante estables como para ser un \emph{cluster}, y esos puntos terminan siendo identificados como ruido.
 	
-	\subsubsection{HDBSCAN con $min\_cluster\_size=200, min\_samples=1$}
+	\subsubsection{HDBSCAN con \texttt{min\_cluster\_size}=200, \texttt{min\_samples=1}}
 	
 	\begin{table}[h]
 		\centering
@@ -854,7 +857,7 @@
 			2  & 313  & 467{,}77 & 2{,}00  & 533{,}26 \\
 			3  & 520  & 108{,}38 & 2{,}00  & 599{,}32 \\
 			4  & 277  & 86{,}28  & 5{,}00  & 1.511{,}66 \\
-			5  & 317  & 83{,}15  & 4{,}00  & 1.126.{,}10 \\
+			5  & 317  & 83{,}15  & 4{,}00  & 1.126{,}10 \\
 			6  & 575  & 164{,}57 & 3{,}00  & 902{,}58 \\
 			7  & 633  & 132{,}91 & 1{,}00  & 313{,}56 \\
 			8  & 749  & 508{,}62 & 1{,}00  & 266{,}35 \\
@@ -871,8 +874,8 @@
 		\label{fig:hdbscan-3d2}
 	\end{figure}
 	
-	Con esta configuración, los nueve \emph{clusters} muestran una especie de gradiente de valor de cliente, como puede verse en la Tabla~\ref{tab:perfil-hdbscan2} y en la Figura~\ref{fig:hdbscan-3d}. En un extremo están el \emph{Cluster} 0 y el \emph{Cluster} 1, con la recencia más baja y la frecuencia más alta del grupo, son los clientes que compran seguido y hace poco, algo que se aprecia bien en la Figura~\ref{fig:clusters_recencia_frecuencia_hdbscan2}. En el otro extremo aparecen el \emph{Cluster} 2 y el \emph{Cluster} 8, con recencias arriba de los 400 días y apenas una o dos compras en total, que representan a los clientes prácticamente perdidos. En el medio se ubican el resto de los \emph{clusters}, con distintas combinaciones de recencia y frecuencia que van marcando ese pasaje de un extremo al otro. Los \emph{clusters} 3, 4, 5 y 6 completan ese pasaje entre los dos extremos, y aunque a simple vista parecen parecidos entre sí, tienen matices que los distinguen. El \emph{Cluster} 4 y el \emph{Cluster} 5 tienen la recencia más baja de este grupo intermedio (86 y 83 días) junto con una frecuencia moderada (5 y 4 compras), lo que los deja como clientes activos aunque no tan seguido como los del \emph{Cluster} 0 o el \emph{Cluster} 1. El \emph{Cluster} 3, en cambio, tiene una recencia bastante más alta (108 días) pero solo 2 compras en promedio, mientras que el \emph{Cluster} 6 es el que más se acerca al extremo de clientes perdidos dentro de este grupo intermedio, con una recencia de 164 días y apenas 3 compras. En conjunto, estos cuatro \emph{clusters} muestran que entre "cliente activo" y "cliente perdido" no hay un corte tajante, sino una transición bastante gradual. Vale la pena remarcar el caso del \emph{Cluster} -1: a diferencia de lo que suele pasar, acá el ruido no representa a los clientes menos valiosos, sino todo lo contrario: tiene el monto promedio más alto de todos los grupos (\$8.700 aproximadamente), muy por encima de cualquiera de los nueve \emph{clusters}, tal como se ve en las Figuras~\ref{fig:clusters_frecuencia_monto_hdbscan2} y \ref{fig:clusters_recencia_monto_hdbscan2}. Esto tiene sentido porque HDBSCAN termina descartando como ruido a los casos que no encajan bien en ningún patrón, y entre esos casos atípicos hay varios clientes de compra muy grande que no logran agruparse entre sí por ser pocos y no tener un comportamiento parecido.
-	En cuanto a los gráficos, se armó una versión con zoom de los que incluyen el Monto, dejando afuera de la vista al cliente con el monto más alto. En la Figura~\ref{fig:clusters_frecuencia_monto_zoom_hdbscan2} se ve que los nueve \emph{clusters} se ordenan en franjas bastante marcadas según su frecuencia y monto. Esto se aprecia todavía mejor en la Figura~\ref{fig:clusters_recencia_monto_zoom_hdbscan2}, donde se nota algo particular: el \emph{Cluster} 7 y el \emph{Cluster} 8 agrupan a clientes que compraron una sola vez, pero quedan bien separados por la recencia: el \emph{Cluster} 7 son clientes que compraron hace relativamente poco (recencia promedio de 133 días), mientras que el \emph{Cluster} 8 son clientes que probaron una vez y nunca más volvieron (recencia promedio de casi 509 días). Es una distinción que con menos \emph{clusters} no se llegaba a ver, y que tiene bastante sentido para pensar estrategias de recontacto distintas para cada uno de estos dos grupos.
+	Con esta configuración, los nueve \emph{clusters} muestran una especie de gradiente de valor de cliente, como puede verse en la Tabla~\ref{tab:perfil-hdbscan2} y en la Figura~\ref{fig:hdbscan-3d}. En un extremo están el \emph{Cluster} 0 y el \emph{Cluster} 1, con la recencia más baja y la frecuencia más alta del grupo, son los clientes que compran seguido y hace poco, algo que se aprecia bien en la Figura~\ref{fig:clusters_recencia_frecuencia_hdbscan2}. En el otro extremo aparecen el \emph{Cluster} 2 y el \emph{Cluster} 8, con recencias arriba de los 400 días y apenas una o dos compras en total, que representan a los clientes prácticamente perdidos. En el medio se ubican el resto de los \emph{clusters}, con distintas combinaciones de recencia y frecuencia que van marcando ese pasaje de un extremo al otro. Los \emph{clusters} 3, 4, 5 y 6 completan ese pasaje entre los dos extremos y aunque a simple vista resultan similares entre sí, presentan matices que los distinguen. El \emph{Cluster} 4 y el \emph{Cluster} 5 tienen la recencia más baja de este grupo intermedio (86 y 83 días) junto con una frecuencia moderada (5 y 4 compras), lo que los deja como clientes activos aunque no tan seguido como los del \emph{Cluster} 0 o el \emph{Cluster} 1. El \emph{Cluster} 3, en cambio, tiene una recencia bastante más alta (108 días) pero solo 2 compras en promedio, mientras que el \emph{Cluster} 6 es el que más se acerca al extremo de clientes perdidos dentro de este grupo intermedio, con una recencia de 164 días y apenas 3 compras. En conjunto, estos cuatro \emph{clusters} muestran que entre ``cliente activo'' y ``cliente perdido'' no hay un corte tajante, sino una transición bastante gradual. Vale la pena remarcar el caso del \emph{Cluster} -1: a diferencia de lo que suele pasar, acá el ruido no representa a los clientes menos valiosos, sino todo lo contrario: tiene el monto promedio más alto de todos los grupos (\$8.700 aproximadamente), muy por encima de cualquiera de los nueve \emph{clusters}, tal como se ve en las Figuras~\ref{fig:clusters_frecuencia_monto_hdbscan2} y \ref{fig:clusters_recencia_monto_hdbscan2}. Esto tiene sentido porque HDBSCAN termina descartando como ruido a los casos que no encajan bien en ningún patrón, y entre esos casos atípicos hay varios clientes de compra muy grande que no logran agruparse entre sí por ser pocos y no tener un comportamiento parecido.
+	En cuanto a los gráficos, se armó una versión con zoom de los que incluyen el Monto, dejando afuera de la vista al cliente con el monto más alto. En la Figura~\ref{fig:clusters_frecuencia_monto_zoom_hdbscan2} se ve que los nueve \emph{clusters} se ordenan en franjas bastante marcadas según su frecuencia y monto. Esto se aprecia todavía mejor en la Figura~\ref{fig:clusters_recencia_monto_zoom_hdbscan2}, donde se nota algo particular: el \emph{Cluster} 7 y el \emph{Cluster} 8 agrupan a clientes que compraron una sola vez, pero quedan bien separados por la recencia: el \emph{Cluster} 7 incluye clientes que compraron hace relativamente poco (recencia promedio de 133 días), mientras que el \emph{Cluster} 8 agrupa clientes que compraron hace mucho tiempo (recencia promedio de casi 509 días). Es una distinción que con menos \emph{clusters} no se llega a ver, y que tiene bastante sentido para pensar estrategias de recontacto distintas para cada uno de estos dos grupos.
 	
 	\begin{figure}[h]
 		\centering
@@ -917,49 +920,32 @@
 			\toprule
 			Modelo & Silhouette & Davies-Bouldin & Calinski-Harabasz \\
 			\midrule
-			\emph{K-Means} ($k=4$)     & 0{,}5757  & 0{,}5073 & 3.842{,}37 \\
-			\emph{K-Means} ($k=5$)     & 0{,}6000  & 0{,}5653 & 4.581{,}65 \\
+			K-\emph{Means} con $k=4$     & 0{,}5757  & 0{,}5073 & 3.842{,}37 \\
+			K-\emph{Means} con $k=5$     & 0{,}6000  & 0{,}5653 & 4.581{,}65 \\
 			DBSCAN            & -0{,}0368 & 1{,}0570 & 7{,}13    \\
 			HDBSCAN (500/3)   & 0{,}1412  & 3{,}8249 & 2.219{,}82 \\
 			HDBSCAN (200/1)   & -0{,}0290 & 4{,}6234 & 1.686{,}66 \\
 			\bottomrule
 		\end{tabular}
-		\caption{Comparación de métricas de evaluación entre los distintos modelos.}
+		\caption{Comparación de métricas de evaluación entre los distintos modelos. En HDBSCAN, la notación $(m/s)$ indica los valores de \texttt{min\_cluster\_size} y \texttt{min\_samples}, respectivamente.}
 		\label{tab:comparacion-metricas}
 	\end{table}
 	
 	La Tabla~\ref{tab:comparacion-metricas} muestra los resultados de las tres métricas utilizadas para comparar los distintos modelos: Silhouette,
-	Davies-Bouldin y Calinski-Harabasz. \emph{K-means} con $k=5$ es el que mejor puntúa en las tres, seguido por \emph{K-means} con $k=4$. DBSCAN queda muy por detrás en todos los casos, lo cual confirma la limitación que ya se había visto en los gráficos: al concentrar casi todos los clientes en un único \emph{cluster}, no logra una segmentación real. Un resultado que vale la pena remarcar es que, entre las dos configuraciones de HDBSCAN, la que mejor puntúa en las métricas es la primera (\texttt{min\_cluster\_size}=500, \texttt{min\_samples}=3), a pesar de que se había probado también la segunda configuración (\texttt{min\_cluster\_size}=200, \texttt{min\_samples}=1) por dar una segmentación con más sentido para el negocio. Esto tiene que ver con que estas métricas premian \emph{clusters} compactos y bien separados entre sí. La configuración de 9 \emph{clusters}, en cambio, encuentra matices más finos entre los clientes, como la distinción entre compradores únicos recientes y perdidos, que valen la pena desde el punto de vista del negocio, aunque las métricas internas no lo reflejen tan bien. En conjunto, \emph{K-means} con $k=5$ se queda como el modelo con mejor desempeño según estas métricas, lo cual coincide con que fue el más fácil de interpretar y el que dio una segmentación más pareja a lo largo de todo el análisis.
+	Davies-Bouldin y Calinski-Harabasz. K-\emph{means} con $k=5$ es el que mejor puntúa en las tres, seguido por K-\emph{means} con $k=4$. DBSCAN queda muy por detrás en todos los casos, lo cual confirma la limitación que ya se había visto en los gráficos: al concentrar casi todos los clientes en un único \emph{cluster}, no logra una segmentación real. Un resultado que vale la pena remarcar es que, entre las dos configuraciones de HDBSCAN, la que mejor puntúa en las métricas es la primera (\texttt{min\_cluster\_size}=500, \texttt{min\_samples}=3), a pesar de que se había probado también la segunda configuración (\texttt{min\_cluster\_size}=200, \texttt{min\_samples}=1) por dar una segmentación con más sentido para el negocio. Esto tiene que ver con que estas métricas premian \emph{clusters} compactos y bien separados entre sí. La configuración de 9 \emph{clusters}, en cambio, encuentra matices más finos entre los clientes, como la distinción entre compradores únicos recientes y perdidos, que valen la pena desde el punto de vista del negocio, aunque las métricas internas no lo reflejen tan bien. En conclusión, \emph{K-meams} con $k=5$ resulta ser el modelo con mejor desempeño según estas métricas, lo cual coincide con que fue el más fácil de interpretar y el que dio una segmentación más pareja a lo largo de todo el análisis.
 	
 	\chapter{Conclusiones}
 	
-	En este trabajo se analizó y comparó el desempeño de los algoritmos de \emph{clustering} \emph{K-means}, DBSCAN e HDBSCAN combinados con el modelo RFM (Recencia, Frecuencia, Monto) para la segmentación de clientes de un comercio minorista en línea (\emph{Online Retail II}).
+	En este trabajo se analizó y comparó el desempeño de los algoritmos de \emph{clustering} K-\emph{means}, DBSCAN e HDBSCAN combinados con el modelo RFM (Recencia, Frecuencia, Monto) para la segmentación de clientes de un comercio minorista en línea, utilizando la base de datos \emph{Online Retail II}.
 	
-	A lo largo del desarrollo se observaron diferencias significativas en la forma en que cada método procesa la información y estructura los grupos, arribando a las siguientes conclusiones principales:
-	\begin{itemize}
-		\item \textbf{Desempeño de \emph{K-means} en métricas de evaluación interna:}
-		El algoritmo \emph{K-means} con $k=5$ presentó los mejores indicadores cuantitativos entre los modelos evaluados, alcanzando un coeficiente de Silhouette de 0{,}6000, un índice de Davies-Bouldin de 0{,}5653 y un valor de Calinski-Harabasz de 4.581{,}65. Estas métricas reflejan que \emph{K-means} logró construir grupos bien delimitados y internamente compactos, delimitando de manera limpia a los clientes inactivos, los compradores habituales y las distintas categorías de mayor gasto.
-		
-		\item\textbf{Dificultades de DBSCAN ante datos con densidad variable:}
-		La configuración probada de DBSCAN ($\epsilon=0{,}2$, \texttt{min\_puntos}=5) mostró limitaciones para generar una segmentación equilibrada. El algoritmo concentró al 96{,}3\% de la base de usuarios en un solo \emph{clúster} general y marcó como ruido a casi la totalidad de los clientes con mayor frecuencia y gasto. Este resultado confirma en la práctica la dificultad de DBSCAN para responder a conjuntos de datos donde la densidad varía fuertemente entre la masa principal de usuarios y los compradores de mayor valor. 
-		
-		\item \textbf{Relación entre métricas matemáticas y utilidad comercial en HDBSCAN:}
-		Aunque HDBSCAN registró puntajes más bajos en los índices de evaluación sintéticos debido a la forma en que estas métricas penalizan la presencia de puntos de ruido o fronteras irregulares, la variante con \texttt{min\_cluster\_size=200} y \texttt{min\_samples=1}1 aportó una perspectiva muy útil desde el punto de vista del análisis de negocio. Esta configuración permitió descomponer la base en 9 gradientes que reflejan con detalle las etapas intermedias entre un cliente activo y uno perdido, diferenciando, por ejemplo, a los compradores ocasionales recientes de aquellos que no registran actividad desde hace tiempo.
-		
-		\item \textbf{Gestión de valores extremos y clientes corporativos:}
-		Un aspecto relevante del enfoque por densidad en HDBSCAN fue su tratamiento de las observaciones atípicas. Mientras que en \emph{K-means} la presencia de un cliente con un volumen de compra excepcional (\$580.987{,}04) genera un \emph{clúster} de un único integrante y condiciona la escala del resto, HDBSCAN clasifica a estos usuarios con perfiles de compra extremos dentro de la categoría de ruido junto a otros clientes de facturación elevada (con un promedio cercano a los \$8.700). De este modo, se evita distorsionar la agrupación de los clientes de consumo regular.
-
-	\end{itemize}
+	A lo largo del trabajo se vio que cada método agrupa a los clientes de forma distinta. Por un lado K-\emph{means} con $k=5$ obtuvo los mejores valores en las métricas internas: un Silhouette de 0{,}6000, un Davies-Bouldin de 0{,}5653 y un Calinski-Harabasz de 4.581{,}65. Los grupos que formó son compactos y están bien separados entre sí,  distinguen a los clientes inactivos, de los compradores habituales y de los de mayor gasto. Por lo contrario, DBSCAN con \texttt{epsilon}=0{,}2, \texttt{min\_samples}=5 no logró una segmentación útil ya que dejó al 96{,}3\% de los clientes en un único \emph{cluster} y marcó como ruido a casi todos los que tenían mucha frecuencia y gasto. Esto se debe a que la densidad cambia mucho entre la masa principal de clientes y los compradores más grandes, y un único \texttt{epsilon} no sirve para ambos casos. Esto se puede observar en las metricas donde el modelo obtuvo el Silhouette más bajo de todos los modelos con un valor de -0{,}0368 y también el Calinski-Harabasz esta muy por debajo  con 7{,}13. Por otro lado, HDBSCAN no depende de un único \texttt{epsilon} lo que permitió identificar \emph{clusters} a distintas densidades, por lo que logró separar a la mayoría de los clientes sin descartar a los de mayor gasto. Sus valores en las métricas fueron más bajos, en parte porque estas penalizan los puntos de ruido y favorecen \emph{clusters} compactos. Aun así, con \texttt{min\_cluster\_size}$=200$ y \texttt{min\_samples}$=1$ dividió a los clientes en 9 \emph{clusters} que muestran etapas intermedias entre el cliente activo y el perdido, por ejemplo, separando a los que compraron hace poco de los que llevan mucho tiempo sin comprar.
 	
-	A partir de los resultados obtenidos, se concluye que no existe un único algoritmo superior en todos los aspectos, sino que sus aportes resultan complementarios:
-	\begin{itemize}
-		\item Para la gestión operativa y la automatización de campañas de marketing general, \emph{K-means} (con $k=5$) se presenta como la opción más adecuada por su simplicidad, rápido cómputo y consistencia en los indicadores de separación.
-		
-		\item Por su parte, HDBSCAN constituye una herramienta analítica valiosa para explorar la estructura profunda de los datos, aislar automáticamente cuentas corporativas o mayoristas y diseñar estrategias específicas de recontacto orientadas a subgrupos con hábitos de compra particulares.
-	\end{itemize}
+	Los valores extremos se trataron distinto en cada modelo. En K-\emph{means} tanto con $k=4$ como con $k=5$ un cliente con una compra de \$580.987{,}04 formó un \emph{cluster} de un solo integrante. Por su parte, DBSCAN marcó como ruido a 182 clientes (3{,}4\,\% del total), con una frecuencia promedio de 42{,}05 compras y un monto promedio de \$32.350{,}80, valores muy superiores a los del resto de los clientes. HDBSCAN, en cambio, marcó como ruido a un grupo bastante más grande de 1.760 clientes (32{,}9\,\% del total) con \texttt{min\_cluster\_size}=500 y \texttt{min\_samples}=3, y 1.173 (21{,}9\,\% del total) con \texttt{min\_cluster\_size}=200 y \texttt{min\_samples}=1, con un monto promedio de \$8.700{,}18. En ambos casos, el ruido tiene una frecuencia y un monto promedio más altos que los de la mayoría de los \emph{clusters}, pero es un grupo mucho más numeroso que el de DBSCAN, por lo que no corresponde solo a casos atípicos aislados.
+	
+	En definitiva, K-\emph{means} con $k=5$ es más adecuado para campañas de marketing generales, ya que asigna cadaa cliente a un grupo, sus \emph{clusters} son fáciles de interpretar y obtuvo los mejores valores de Silhouette y Calinski-Harabasz. Su principal limitación es que los clientes con valores muy altos, como el de \$580.987{,}04, pueden terminar formando un \emph{cluster} propio, lo que deja 4 \emph{clusters} para agrupar al resto de los clientes.  Además, un \emph{cluster} de un único cliente no sirve para una campaña de marketing masiva, pero sí puede ser útil si se busca aislar un caso que requiere un trato aparte, por ejemplo una cuenta corporativa. HDBSCAN, por su parte, sirve más para identificar perfiles de clientes mas específicos. Con \texttt{min\_cluster\_size}$=200$ y \texttt{min\_samples}$=1$ dividió a los clientes en 9 \emph{clusters} que van del cliente activo al perdido, pasando por varios perfiles intermedios. Esto permite diseñar acciones de recontacto distintas según el grupo por ejemplo, un mensaje de fidelización para los clientes recientes y frecuentes, una promoción para incentivar la segunda compra en quienes compraron una sola vez, y una oferta de reactivación para los que llevan más de un año sin comprar. Además, los clientes identificados como ruido, con una frecuencia y un monto promedio más altos que los de la mayoría de los \emph{clusters}, pueden ser un punto de partida para detectar clientes mayoristas o corporativos. DBSCAN, en cambio, resultó el menos útil de los tres con los parámetros probados: concentró a casi todos los clientes en un único \emph{cluster} y no logró distinguir perfiles.
 	
 	
-	\bibliographystyle{plain}
+	\bibliographystyle{plainnat}
 	\bibliography{Referencias}
 	\addcontentsline{toc}{chapter}{Bibliografía}
 	

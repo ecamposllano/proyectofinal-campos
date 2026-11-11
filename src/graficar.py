@@ -118,7 +118,7 @@ def graficarBoxplotRFMEscalado(rfm_escalado):
 
     versiones = [
         ("graficos/boxplot_rfm_escalado.png", None),
-        ("graficos/boxplot_rfm_escalado_zoom.png", (-1, 10)),
+        ("graficos/boxplot_rfm_escalado_zoom.png", (-1, 3)),
     ]
 
     for ruta, limite_y in versiones:

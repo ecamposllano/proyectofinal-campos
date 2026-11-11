@@ -1,3 +1,67 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{9}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Aimar(2025)]{aimar2025}
+Davide Aimar.
+\newblock Comparative study of customer segmentation strategies based on
+  business analytics.
+\newblock Master's thesis, Politecnico di Torino, 2025.
+
+\bibitem[Campello et~al.(2013)Campello, Moulavi, and Sander]{campello2013}
+Ricardo J. G.~B. Campello, Davoud Moulavi, and J{\"o}rg Sander.
+\newblock Density-based clustering based on hierarchical density estimates.
+\newblock In \emph{Advances in Knowledge Discovery and Data Mining (PAKDD
+  2013)}, volume 7819 of \emph{LNCS}, pages 160--172, 2013.
+
+\bibitem[Chen et~al.(2012)Chen, Sain, and Guo]{chen2012}
+Daqing Chen, Sai~Laing Sain, and Kun Guo.
+\newblock Data mining for the online retail industry: A case study of rfm
+  model-based customer segmentation using data mining.
+\newblock \emph{Journal of Database Marketing \& Customer Strategy Management},
+  19\penalty0 (3):\penalty0 197--208, 2012.
+\newblock \doi{10.1057/dbm.2012.17}.
+
+\bibitem[Ester et~al.(1996)Ester, Kriegel, Sander, and Xu]{ester1996}
+Martin Ester, Hans-Peter Kriegel, J{\"o}rg Sander, and Xiaowei Xu.
+\newblock A density-based algorithm for discovering clusters in large spatial
+  databases with noise.
+\newblock In \emph{Proceedings of the Second International Conference on
+  Knowledge Discovery and Data Mining (KDD-96)}, pages 226--231, 1996.
+
+\bibitem[Hughes(1994)]{hughes1994}
+Arthur~M. Hughes.
+\newblock \emph{Strategic Database Marketing: The Masterplan for Starting and
+  Managing a Profitable, Customer-Based Marketing Program}.
+\newblock Probus Publishing, Chicago, 1994.
+
+\bibitem[Lau and Wasesa(2026)]{lau2026}
+Upekkha Lau and Meditya Wasesa.
+\newblock An empirical comparison of clustering approaches for recency,
+  frequency, and monetary customer segmentation.
+\newblock \emph{IAES International Journal of Artificial Intelligence},
+  15\penalty0 (4):\penalty0 3402--3410, 2026.
+
+\bibitem[MacQueen(1967)]{macqueen1967}
+James MacQueen.
+\newblock Some methods for classification and analysis of multivariate
+  observations.
+\newblock In \emph{Proceedings of the Fifth Berkeley Symposium on Mathematical
+  Statistics and Probability}, volume~1, pages 281--297, 1967.
+
+\bibitem[McInnes et~al.(2017)McInnes, Healy, and Astels]{mcinnes2017}
+Leland McInnes, John Healy, and Steve Astels.
+\newblock hdbscan: Hierarchical density based clustering.
+\newblock \emph{Journal of Open Source Software}, 2\penalty0 (11):\penalty0
+  205, 2017.
+
+\bibitem[Smith(1956)]{smith1956}
+Wendell~R. Smith.
+\newblock Product differentiation and market segmentation as alternative
+  marketing strategies.
+\newblock \emph{Journal of Marketing}, 21\penalty0 (1):\penalty0 3--8, 1956.
 
 \end{thebibliography}
